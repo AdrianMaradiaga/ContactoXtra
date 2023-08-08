@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ContactoXtra</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="lbl_registro_de_usuario">Registro de usuario</string>
+    <string name="lbl_nombre_de_usuario">Nombre de usuario</string>
+    <string name="lbl_apellido_de_usuario">Apellido de usuario</string>
+    <string name="lbl_numero_de_telefono">Numero de telefono</string>
+    <string name="lbl_fecha_de_cumplea_os">Fecha de cumpleaños</string>
+    <string name="lbl_obtener_ubicacion">Obtener ubicacion</string>
+    <string name="guardar">Guardar</string>
+    <string name="title_contactos">Contactos</string>
+</resources>
