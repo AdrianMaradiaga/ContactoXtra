@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/baseline_notifications_24"
-        android:title="@string/title_recordatorios" />
+        android:id="@+id/navigation_ubicaciones"
+        android:icon="@drawable/baseline_location_on_24"
+        android:title="@string/title_ubicaciones" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_contactos"
         android:icon="@drawable/baseline_contacts_24"
         android:title="@string/title_contactos" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_usuario"
         android:icon="@drawable/baseline_person_24"
         android:title="@string/title_usuario" />
 </menu>

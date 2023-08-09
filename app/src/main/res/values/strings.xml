@@ -13,4 +13,10 @@
     <string name="title_contactos">Contactos</string>
     <string name="title_usuario">Usuario</string>
     <string name="title_recordatorios">Recordatorios</string>
+    <string name="title_agregar_contacto">Agregar Contacto</string>
+    <string name="txt_nombre_de_contacto">Nombre de contacto</string>
+    <string name="txt_apellido_de_contacto">Apellido de contacto</string>
+    <string name="txt_correo_electronico_de_contacto">Correo electronico de contacto</string>
+    <string name="txt_numero_de_telefono_de_contacto">Numero de telefono de contacto</string>
+    <string name="title_ubicaciones">Ubicaciones</string>
 </resources>

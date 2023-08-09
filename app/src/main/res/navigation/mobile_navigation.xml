@@ -3,23 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_ubicaciones">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_ubicaciones"
         android:name="hn.uth.contactoxtra.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_ubicaciones"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_usuario"
         android:name="hn.uth.contactoxtra.ui.usuario.UsuarioFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_usuario"
         tools:layout="@layout/fragment_usuario" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_contactos"
         android:name="hn.uth.contactoxtra.ui.contactos.ContactosFragment"
         android:label="@string/title_contactos"
         tools:layout="@layout/fragment_contactos" />
+
+    <fragment
+        android:id="@+id/crearContactoFragment"
+        android:name="hn.uth.contactoxtra.ui.crearContactos.CrearContactoFragment"
+        android:label="Crear Contacto"
+        tools:layout="@layout/fragment_crear_contacto" />
+
+    <action
+        android:id="@+id/action_fragmentActual_to_crearContactoFragment"
+        app:destination="@id/crearContactoFragment" />
+
 </navigation>

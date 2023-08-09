@@ -1,143 +1,80 @@
 package hn.uth.contactoxtra.ui.contactos;
 
-import android.Manifest;
-import android.content.ContentResolver;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import hn.uth.contactoxtra.R;
+import hn.uth.contactoxtra.database.Contactos;
 
 import hn.uth.contactoxtra.databinding.FragmentContactosBinding;
-import hn.uth.contactoxtra.entity.Contacto;
 
-public class ContactosFragment extends Fragment {
+import hn.uth.contactoxtra.ui.OnItemClickListener;
+
+public class ContactosFragment extends Fragment implements OnItemClickListener<Contactos> {
 
     private FragmentContactosBinding binding;
-    private static final int PERMISSION_REQUEST_READ_CONTACT = 101;
-
+    private ContactosAdapter adaptador;
+    private ContactosViewModel viewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
+
+
         binding = FragmentContactosBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Solicitar permiso si aún no está concedido
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_READ_CONTACT);
-        } else {
-            // Si el permiso ya está concedido, cargar los contactos directamente
-            cargarContactos();
-        }
+        viewModel = new ViewModelProvider(this).get(ContactosViewModel.class);
 
+        adaptador = new ContactosAdapter(getContext(), new ArrayList<>(), this, viewModel);
+        viewModel.getContactosDataset().observe(getViewLifecycleOwner(), contactos -> adaptador.setItems(contactos));
+
+        setupRecyclerView();
+
+        FloatingActionButton fabAgregarContacto = root.findViewById(R.id.fabAgregarContacto);
+        fabAgregarContacto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Obtener el NavController
+                NavController navController = Navigation.findNavController(view);
+
+                // Navegar al fragmento CrearContactoFragment
+                navController.navigate(R.id.action_fragmentActual_to_crearContactoFragment);
+            }
+        });
 
         return root;
     }
 
-    private void cargarContactos() {
-        // Obtener la lista de contactos
-        List<Contacto> listaContactos = obtenerListaDeContactos();
-        // Configurar el RecyclerView y el Adapter
-        RecyclerView recyclerView = binding.rvContactos;
-        ContactosAdapter adapter = new ContactosAdapter(listaContactos);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-    }
 
-    private List<Contacto> obtenerListaDeContactos() {
-        List<Contacto> listaContactos = new ArrayList<>();
-        // Verificar si se tienen los permisos para acceder a los contactos
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            // Si no se tiene el permiso, retornar una lista vacía temporalmente
-            return listaContactos;
-        }
-        ContentResolver contentResolver = requireContext().getContentResolver();
-        Cursor cursor = contentResolver.query(
-                ContactsContract.Contacts.CONTENT_URI,
-                new String[]{ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME},
-                null,
-                null,
-                ContactsContract.Contacts.DISPLAY_NAME + " ASC"
-        );
-        if (cursor != null && cursor.moveToFirst()) {
-            int nameColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-            int idColumnIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID);
 
-            do {
-                String nombreContacto = cursor.getString(nameColumnIndex);
-                String contactoId = cursor.getString(idColumnIndex);
-
-                Contacto contacto = new Contacto();
-                contacto.setName(nombreContacto);
-
-                // Obtener el número de teléfono asociado al contacto
-                Cursor phoneCursor = contentResolver.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                        new String[]{contactoId},
-                        null
-                );
-                if (phoneCursor != null && phoneCursor.moveToFirst()) {
-                    int phoneColumnIndex = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                    String numeroTelefono = phoneCursor.getString(phoneColumnIndex);
-                    contacto.setPhone(numeroTelefono);
-                    phoneCursor.close();
-                }
-                // Obtener el correo electrónico asociado al contacto
-                Cursor emailCursor = contentResolver.query(
-                        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                        new String[]{ContactsContract.CommonDataKinds.Email.DATA},
-                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                        new String[]{contactoId},
-                        null
-                );
-                if (emailCursor != null && emailCursor.moveToFirst()) {
-                    int emailColumnIndex = emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
-                    String correo = emailCursor.getString(emailColumnIndex);
-                    contacto.setEmail(correo);
-                    emailCursor.close();
-                }
-
-                listaContactos.add(contacto);
-            } while (cursor.moveToNext());
-
-            cursor.close();
-        }
-
-        return listaContactos;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_READ_CONTACT) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permiso concedido, cargar los contactos
-                cargarContactos();
-            } else {
-                // Permiso denegado, mostrar mensaje o realizar acciones apropiadas
-                Snackbar.make(requireView(), "No se pueden buscar contactos sin permiso", Snackbar.LENGTH_LONG).show();
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    private void setupRecyclerView(){
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        binding.rvContactos.setLayoutManager(linearLayoutManager);
+        binding.rvContactos.setAdapter(adaptador);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onItemClick(Contactos data) {
+
     }
 }
