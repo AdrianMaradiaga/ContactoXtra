@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -30,9 +31,6 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
     private ContactosViewModel viewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
-
 
         binding = FragmentContactosBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -77,4 +75,5 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
     public void onItemClick(Contactos data) {
 
     }
+
 }

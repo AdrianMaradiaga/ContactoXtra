@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.usuario.UsuarioFragment">
+    tools:context=".ui.crearContactos.DetalleContactoFragment">
 
     <ImageView
         android:id="@+id/imageView"
@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/profile_data" />
 
     <TextView
-        android:id="@+id/tvNombre"
+        android:id="@+id/tvNombreContacto"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -31,18 +31,18 @@
         tools:text="@string/lbl_nombre_de_usuario" />
 
     <TextView
-        android:id="@+id/tvApellido"
+        android:id="@+id/tvApellidoContacto"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/poppins_medium"
-        app:layout_constraintEnd_toEndOf="@+id/tvNombre"
-        app:layout_constraintStart_toStartOf="@+id/tvNombre"
-        app:layout_constraintTop_toBottomOf="@+id/tvNombre"
+        app:layout_constraintEnd_toEndOf="@+id/tvNombreContacto"
+        app:layout_constraintStart_toStartOf="@+id/tvNombreContacto"
+        app:layout_constraintTop_toBottomOf="@+id/tvNombreContacto"
         tools:text="@string/lbl_apellido_de_usuario" />
 
     <TextView
-        android:id="@+id/tvTelefono"
+        android:id="@+id/tvTelefonoContacto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -57,8 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:src="@drawable/baseline_phone_24"
-        app:layout_constraintStart_toStartOf="@+id/tvNombre"
-        app:layout_constraintTop_toBottomOf="@+id/tvApellido" />
+        app:layout_constraintStart_toStartOf="@+id/tvNombreContacto"
+        app:layout_constraintTop_toBottomOf="@+id/tvApellidoContacto" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -70,11 +70,11 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/tvCumplContacto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
-        app:layout_constraintStart_toStartOf="@+id/tvTelefono"
+        app:layout_constraintStart_toStartOf="@+id/tvTelefonoContacto"
         app:layout_constraintTop_toTopOf="@+id/imageView4"
         tools:text="@string/lbl_fecha_de_cumplea_os" />
 
@@ -88,11 +88,11 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/tvCorreoContacto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintStart_toStartOf="@+id/tvCumplContacto"
         app:layout_constraintTop_toTopOf="@+id/imageView5"
         tools:text="Correo electronico" />
 
@@ -106,24 +106,24 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/tvUbicacionContacto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
-        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintStart_toStartOf="@+id/tvCorreoContacto"
         app:layout_constraintTop_toTopOf="@+id/imageView6"
         tools:text="Ubicacion del usuario" />
 
     <Button
-        android:id="@+id/btnActualizarUsuario"
+        android:id="@+id/btnActualizarContacto"
         style="@style/ShapeAppearanceOverlay.Material3.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Actualizar Usuario"
+        android:text="Actualizar Contacto"
         app:icon="@drawable/baseline_drive_file_rename_outline_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/tvUbicacionContacto" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

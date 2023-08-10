@@ -3,43 +3,47 @@ package hn.uth.contactoxtra.ui.contactos;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 
+import hn.uth.contactoxtra.R;
 import hn.uth.contactoxtra.database.Contactos;
 import hn.uth.contactoxtra.databinding.ContactoItemBinding;
 import hn.uth.contactoxtra.ui.OnItemClickListener;
 
-public class ContactosAdapter extends RecyclerView.Adapter<ContactosAdapter.ViewHolder>{
+public class ContactosAdapter extends RecyclerView.Adapter<ContactosAdapter.ViewHolder> {
+
     private List<Contactos> dataset;
-    private OnItemClickListener<Contactos> manejadorEventoClick;
+    private OnItemClickListener<Contactos> manejadorContactoClick;
     private Context context;
     private ContactosViewModel viewModel;
-    private Contactos contactoSeleccioando;
 
-    public ContactosAdapter(Context context, List<Contactos> dataset, OnItemClickListener<Contactos> manejadorEventoClick, ContactosViewModel viewModel) {
+    public ContactosAdapter(Context context, List<Contactos> dataset, OnItemClickListener<Contactos> manejadorContactoClick, ContactosViewModel viewModel) {
         this.context = context;
         this.dataset = dataset;
-        this.manejadorEventoClick = manejadorEventoClick;
+        this.manejadorContactoClick = manejadorContactoClick;
         this.viewModel = viewModel;
     }
 
     @NonNull
     @Override
-    public ContactosAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ContactoItemBinding binding = ContactoItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContactosAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Contactos contactoItem = dataset.get(position);
 
         holder.binding.tvContacto.setText(contactoItem.getNombre() + " " + contactoItem.getApellido());
@@ -54,6 +58,19 @@ public class ContactosAdapter extends RecyclerView.Adapter<ContactosAdapter.View
             }
         });
 
+        // Establecer el evento de clic en el elemento de lista
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Crear un Bundle y agregar el contacto seleccionado
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("contacto", contactoItem);
+
+                // Obtener el NavController y navegar al fragmento DetalleContactoFragment
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_contactosFragment_to_detalleContactoFragment, bundle);
+            }
+        });
     }
 
     @Override
@@ -61,12 +78,12 @@ public class ContactosAdapter extends RecyclerView.Adapter<ContactosAdapter.View
         return dataset.size();
     }
 
-    public void setItems(List<Contactos> contactos){
+    public void setItems(List<Contactos> contactos) {
         this.dataset = contactos;
         notifyDataSetChanged();
     }
 
-    private void showDialog(Contactos contacto){
+    private void showDialog(Contactos contacto) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Eliminar contacto");
         builder.setMessage("¿Estás seguro de que deseas eliminar este contacto?");
@@ -80,27 +97,17 @@ public class ContactosAdapter extends RecyclerView.Adapter<ContactosAdapter.View
         builder.show();
     }
 
-    /**
-     * Elimina un evento utilizando el ViewModel.
-     * @param contacto El evento a eliminar.
-     */
-    private void deleteContacto(Contactos contacto){
+    private void deleteContacto(Contactos contacto) {
         viewModel.delete(contacto);
     }
 
-    /**
-     * Clase ViewHolder que contiene los componentes de vista del elemento de lista.
-     */
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         ContactoItemBinding binding;
 
-        public ViewHolder(@NonNull ContactoItemBinding itemView){
+        public ViewHolder(@NonNull ContactoItemBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
-        }
-
-        public void setOnClickListener(Contactos contactoMostrar, OnItemClickListener<Contactos> listener){
-            //
         }
     }
 }

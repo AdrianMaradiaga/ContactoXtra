@@ -18,7 +18,7 @@ public abstract class ContactoXtraDatabase extends RoomDatabase {
     private static volatile ContactoXtraDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     // ExecutorService para ejecutar operaciones de escritura en el hilo de fondo
-    static final ExecutorService databaseWriteExectutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     static ContactoXtraDatabase getDatabase(final Context context){
         if(INSTANCE == null){
@@ -29,7 +29,7 @@ public abstract class ContactoXtraDatabase extends RoomDatabase {
                         public void onCreate(@NonNull SupportSQLiteDatabase db){
                             super.onCreate(db);
 
-                            databaseWriteExectutor.execute(() -> {
+                            databaseWriteExecutor.execute(() -> {
                                 ContactosDao contactosDao = INSTANCE.contactosDao();;
                                 contactosDao.deleteAll();
                             });

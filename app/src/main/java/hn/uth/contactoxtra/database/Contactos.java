@@ -1,12 +1,15 @@
 package hn.uth.contactoxtra.database;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "contactos_table")
-public class Contactos {
+public class Contactos implements Parcelable {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
@@ -105,5 +108,43 @@ public class Contactos {
     public void setUbicacionId(long ubicacionId) {
         this.ubicacionId = ubicacionId;
     }
+    protected Contactos(Parcel in) {
+        contactoId = in.readLong();
+        nombre = in.readString();
+        apellido = in.readString();
+        correo = in.readString();
+        telefono = in.readString();
+        fechaCumple = in.readString();
+        ubicacionId = in.readLong();
+    }
+
+    public static final Creator<Contactos> CREATOR = new Creator<Contactos>() {
+        @Override
+        public Contactos createFromParcel(Parcel in) {
+            return new Contactos(in);
+        }
+
+        @Override
+        public Contactos[] newArray(int size) {
+            return new Contactos[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(contactoId);
+        dest.writeString(nombre);
+        dest.writeString(apellido);
+        dest.writeString(correo);
+        dest.writeString(telefono);
+        dest.writeString(fechaCumple);
+        dest.writeLong(ubicacionId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
 }
 

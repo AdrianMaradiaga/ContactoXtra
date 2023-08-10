@@ -17,21 +17,30 @@ public class ContactosRepository {
         dataset = contactosDao.getContactos();
     }
 
-    public long insert(Contactos nuevo) {
-        return contactosDao.insert(nuevo);
+    public void insert(Contactos nuevo) {
+        ContactoXtraDatabase.databaseWriteExecutor.execute(()->{
+            contactosDao.insert(nuevo);
+        });
     }
 
     public void update(Contactos actualizar) {
-        contactosDao.update(actualizar);
+        ContactoXtraDatabase.databaseWriteExecutor.execute(() -> {
+            contactosDao.update(actualizar);
+        });
     }
 
     public void delete(Contactos eliminar) {
-        contactosDao.delete(eliminar);
+        ContactoXtraDatabase.databaseWriteExecutor.execute(() -> {
+            contactosDao.delete(eliminar);
+        });
     }
 
     public void deleteAll() {
-        contactosDao.deleteAll();
+        ContactoXtraDatabase.databaseWriteExecutor.execute(() -> {
+            contactosDao.deleteAll();
+        });
     }
+
 
     public LiveData<List<Contactos>> getDataset() {
         return dataset;

@@ -29,8 +29,22 @@
         android:label="Crear Contacto"
         tools:layout="@layout/fragment_crear_contacto" />
 
+    <fragment
+        android:id="@+id/detalleContactoFragment"
+        android:name="hn.uth.contactoxtra.ui.crearContactos.DetalleContactoFragment"
+        android:label="Ver detalles del contacto"
+        tools:layout="@layout/fragment_detalle_contacto" />
+
+    <action
+        android:id="@+id/action_contactosFragment_to_detalleContactoFragment"
+        app:destination="@id/detalleContactoFragment" />
+
     <action
         android:id="@+id/action_fragmentActual_to_crearContactoFragment"
         app:destination="@id/crearContactoFragment" />
+
+    <action
+        android:id="@+id/action_crearContactoFragment_to_contactosFragment"
+        app:destination="@id/navigation_contactos" />
 
 </navigation>
