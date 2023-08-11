@@ -120,10 +120,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Actualizar Contacto"
+        android:text="@string/lbl_actualizar_contacto"
         app:icon="@drawable/baseline_drive_file_rename_outline_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvUbicacionContacto" />
+
+    <Button
+        android:id="@+id/btnCompartirContacto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/lbl_compartir_contacto"
+        app:icon="@drawable/baseline_share_24"
+        app:layout_constraintEnd_toEndOf="@+id/btnActualizarContacto"
+        app:layout_constraintStart_toStartOf="@+id/btnActualizarContacto"
+        app:layout_constraintTop_toBottomOf="@+id/btnActualizarContacto" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

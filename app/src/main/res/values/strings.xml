@@ -19,4 +19,6 @@
     <string name="txt_correo_electronico_de_contacto">Correo electronico de contacto</string>
     <string name="txt_numero_de_telefono_de_contacto">Numero de telefono de contacto</string>
     <string name="title_ubicaciones">Ubicaciones</string>
+    <string name="lbl_compartir_contacto">Compartir Contacto</string>
+    <string name="lbl_actualizar_contacto">Actualizar Contacto</string>
 </resources>
