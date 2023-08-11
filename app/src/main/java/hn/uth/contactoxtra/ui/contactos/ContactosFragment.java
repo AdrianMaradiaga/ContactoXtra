@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -41,6 +41,9 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
         viewModel.getContactosDataset().observe(getViewLifecycleOwner(), contactos -> adaptador.setItems(contactos));
 
         setupRecyclerView();
+        setupSearchView();
+
+
 
         FloatingActionButton fabAgregarContacto = root.findViewById(R.id.fabAgregarContacto);
         fabAgregarContacto.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +51,6 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
             public void onClick(View view) {
                 // Obtener el NavController
                 NavController navController = Navigation.findNavController(view);
-
                 // Navegar al fragmento CrearContactoFragment
                 navController.navigate(R.id.action_fragmentActual_to_crearContactoFragment);
             }
@@ -64,6 +66,31 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
         binding.rvContactos.setLayoutManager(linearLayoutManager);
         binding.rvContactos.setAdapter(adaptador);
     }
+
+    private void setupSearchView() {
+        binding.buscarContacto.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                buscarContactosPorNombreApellido(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                buscarContactosPorNombreApellido(newText);
+                return false;
+            }
+        });
+    }
+
+    private void buscarContactosPorNombreApellido(String query) {
+        viewModel.buscarContacto(query)
+                .observe(getViewLifecycleOwner(), contactos -> adaptador.setItems(contactos));
+    }
+
+
+
+
 
     @Override
     public void onDestroyView() {

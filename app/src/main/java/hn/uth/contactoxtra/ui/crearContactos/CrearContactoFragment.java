@@ -1,12 +1,18 @@
 package hn.uth.contactoxtra.ui.crearContactos;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -21,16 +27,31 @@ import java.util.Locale;
 import hn.uth.contactoxtra.R;
 import hn.uth.contactoxtra.database.Contactos;
 import hn.uth.contactoxtra.databinding.FragmentCrearContactoBinding;
-import hn.uth.contactoxtra.ui.contactos.ContactosViewModel;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 
-public class CrearContactoFragment extends Fragment {
+
+public class CrearContactoFragment extends Fragment implements LocationListener{
+    private static final int REQUEST_CODE_GPS = 102;
+
     private FragmentCrearContactoBinding binding;
     private CrearContactoViewModel viewModel;
     private Calendar calendar;
 
+    private LocationManager locationManager;
+    private double latitudHogar, longitudHogar, latitudTrabajo, longitudTrabajo;
+    private String tipoUbicacion;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCrearContactoBinding.inflate(inflater, container, false);
+        locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        binding.btnUbicacionHogar.setOnClickListener(v -> obtenerUbicacion("Hogar"));
+        binding.btnUbicacionTrabajo.setOnClickListener(v -> obtenerUbicacion("Trabajo"));
+
         // Ocultar el Bottom Navigation
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.GONE);
@@ -48,6 +69,37 @@ public class CrearContactoFragment extends Fragment {
 
         binding.btnGuardarContacto.setOnClickListener(v -> saveContact());
     }
+
+    private void obtenerUbicacion(String tipoUbicacion) {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null);
+            this.tipoUbicacion = tipoUbicacion; // Usar la variable de instancia
+        } else {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_GPS);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        double latitud = location.getLatitude();
+        double longitud = location.getLongitude();
+
+        if ("Hogar".equals(tipoUbicacion)) {
+            latitudHogar = latitud;
+            longitudHogar = longitud;
+            binding.tvLatitudHogar.setText(String.valueOf(latitudHogar));
+            binding.tvLongitudHogar.setText(String.valueOf(longitudHogar));
+        } else if ("Trabajo".equals(tipoUbicacion)) {
+            latitudTrabajo = latitud;
+            longitudTrabajo = longitud;
+            binding.tvLatitudTrabajo.setText(String.valueOf(latitudTrabajo));
+            binding.tvLongitudTrabajo.setText(String.valueOf(longitudTrabajo));
+        }
+
+        // Detener las actualizaciones de ubicación después de obtener los valores
+        locationManager.removeUpdates(this);
+    }
+
 
     private void showDatePickerDialog() {
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
@@ -88,7 +140,7 @@ public class CrearContactoFragment extends Fragment {
         }
 
         // Crear un objeto Contacto con los datos ingresados
-        Contactos nuevoContacto = new Contactos(nombre, apellido, correo, telefono, fechaCumple, 0);
+        Contactos nuevoContacto = new Contactos(nombre, apellido, correo, telefono, fechaCumple, 0, latitudHogar, longitudHogar, latitudTrabajo, longitudTrabajo);
 
         // Guardar el contacto usando el ViewModel
         viewModel.insert(nuevoContacto);
@@ -118,7 +170,6 @@ public class CrearContactoFragment extends Fragment {
         // Mostrar el Bottom Navigation nuevamente al salir del fragmento
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.VISIBLE);
-
 
         binding = null;
     }

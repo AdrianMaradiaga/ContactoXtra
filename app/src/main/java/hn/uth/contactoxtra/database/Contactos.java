@@ -38,15 +38,32 @@ public class Contactos implements Parcelable {
     @ColumnInfo(name = "ubicacion_id")
     private long ubicacionId; // Referencia a la ubicación seleccionada
 
+    @ColumnInfo(name = "latitud_hogar")
+    private double latitudHogar;
+
+    @ColumnInfo(name = "longitud_hogar")
+    private double longitudHogar;
+
+    @ColumnInfo(name = "latitud_trabajo")
+    private double latitudTrabajo;
+
+    @ColumnInfo(name = "longitud_trabajo")
+    private double longitudTrabajo;
+
     // Constructor, getters y setters
 
-    public Contactos(@NonNull String nombre, @NonNull String apellido, @NonNull String correo, @NonNull String telefono, String fechaCumple, long ubicacionId) {
+
+    public Contactos(@NonNull String nombre, @NonNull String apellido, @NonNull String correo, @NonNull String telefono, String fechaCumple, long ubicacionId, double latitudHogar, double longitudHogar, double latitudTrabajo, double longitudTrabajo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.telefono = telefono;
         this.fechaCumple = fechaCumple;
         this.ubicacionId = ubicacionId;
+        this.latitudHogar = latitudHogar;
+        this.longitudHogar = longitudHogar;
+        this.latitudTrabajo = latitudTrabajo;
+        this.longitudTrabajo = longitudTrabajo;
     }
 
     public long getContactoId() {
@@ -108,6 +125,39 @@ public class Contactos implements Parcelable {
     public void setUbicacionId(long ubicacionId) {
         this.ubicacionId = ubicacionId;
     }
+
+    public double getLatitudHogar() {
+        return latitudHogar;
+    }
+
+    public void setLatitudHogar(double latitudHogar) {
+        this.latitudHogar = latitudHogar;
+    }
+
+    public double getLongitudHogar() {
+        return longitudHogar;
+    }
+
+    public void setLongitudHogar(double longitudHogar) {
+        this.longitudHogar = longitudHogar;
+    }
+
+    public double getLatitudTrabajo() {
+        return latitudTrabajo;
+    }
+
+    public void setLatitudTrabajo(double latitudTrabajo) {
+        this.latitudTrabajo = latitudTrabajo;
+    }
+
+    public double getLongitudTrabajo() {
+        return longitudTrabajo;
+    }
+
+    public void setLongitudTrabajo(double longitudTrabajo) {
+        this.longitudTrabajo = longitudTrabajo;
+    }
+
     protected Contactos(Parcel in) {
         contactoId = in.readLong();
         nombre = in.readString();
@@ -116,6 +166,10 @@ public class Contactos implements Parcelable {
         telefono = in.readString();
         fechaCumple = in.readString();
         ubicacionId = in.readLong();
+        latitudHogar = in.readDouble();
+        longitudHogar = in.readDouble();
+        latitudTrabajo = in.readDouble();
+        longitudTrabajo = in.readDouble();
     }
 
     public static final Creator<Contactos> CREATOR = new Creator<Contactos>() {
@@ -139,6 +193,10 @@ public class Contactos implements Parcelable {
         dest.writeString(telefono);
         dest.writeString(fechaCumple);
         dest.writeLong(ubicacionId);
+        dest.writeDouble(latitudHogar);
+        dest.writeDouble(longitudHogar);
+        dest.writeDouble(latitudTrabajo);
+        dest.writeDouble(longitudTrabajo);
     }
 
     @Override

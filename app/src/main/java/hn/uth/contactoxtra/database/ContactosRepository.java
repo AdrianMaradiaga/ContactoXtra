@@ -46,8 +46,9 @@ public class ContactosRepository {
         return dataset;
     }
 
-    public LiveData<List<Contactos>> buscarContacto(String nombre) {
-        return contactosDao.buscarContacto(nombre);
+    public LiveData<List<Contactos>> buscarContacto(String query) {
+        return contactosDao.buscarContacto(query);
     }
+
 }
 

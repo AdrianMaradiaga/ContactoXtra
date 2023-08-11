@@ -27,6 +27,9 @@ public interface ContactosDao {
     @Query("SELECT * FROM contactos_table")
     LiveData<List<Contactos>> getContactos();
 
-    @Query("SELECT * FROM contactos_table WHERE nombre_contacto LIKE '%' || :nombre || '%'")
-    LiveData<List<Contactos>> buscarContacto(String nombre);
+    @Query("SELECT * FROM contactos_table WHERE " +
+            "REPLACE(nombre_contacto || ' ' || apellido_contacto, ' ', '') " +
+            "LIKE '%' || REPLACE(:query, ' ', '') || '%'")
+    LiveData<List<Contactos>> buscarContacto(String query);
+
 }

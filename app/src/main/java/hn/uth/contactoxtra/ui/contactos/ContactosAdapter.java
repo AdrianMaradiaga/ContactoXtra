@@ -46,7 +46,8 @@ public class ContactosAdapter extends RecyclerView.Adapter<ContactosAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Contactos contactoItem = dataset.get(position);
 
-        holder.binding.tvContacto.setText(contactoItem.getNombre() + " " + contactoItem.getApellido());
+        String nombreCompleto = contactoItem.getNombre().trim() + " " + contactoItem.getApellido().trim();
+        holder.binding.tvContacto.setText(nombreCompleto);
         holder.binding.tvTelefono.setText(contactoItem.getTelefono());
         holder.binding.tvCorreo.setText(contactoItem.getCorreo());
 

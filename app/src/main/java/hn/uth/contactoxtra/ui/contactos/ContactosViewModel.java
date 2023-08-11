@@ -26,6 +26,10 @@ public class ContactosViewModel extends AndroidViewModel {
     public LiveData<List<Contactos>> getContactosDataset(){
         return contactosDataset;
     }
+    public LiveData<List<Contactos>> buscarContacto(String query) {
+        return repository.buscarContacto("%" + query + "%");
+    }
+
 
 
     public void insert(Contactos contacto) {
