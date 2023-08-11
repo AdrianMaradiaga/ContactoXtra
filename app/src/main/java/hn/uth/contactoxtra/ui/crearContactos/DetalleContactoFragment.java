@@ -1,11 +1,13 @@
 package hn.uth.contactoxtra.ui.crearContactos;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -23,7 +25,7 @@ public class DetalleContactoFragment extends Fragment {
     private TextView tvCumplContacto;
     private TextView tvCorreoContacto;
     private TextView tvUbicacionContacto;
-
+    private Contactos contacto;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class DetalleContactoFragment extends Fragment {
         tvUbicacionContacto = rootView.findViewById(R.id.tvUbicacionContacto);
 
         // Obtener el objeto Contactos de los argumentos del fragmento
-        Contactos contacto = getArguments().getParcelable("contacto");
+        contacto = getArguments().getParcelable("contacto");
 
         // Asignar los valores del objeto Contactos a los elementos de vista
         if (contacto != null) {
@@ -49,13 +51,43 @@ public class DetalleContactoFragment extends Fragment {
             tvTelefonoContacto.setText(contacto.getTelefono());
             tvCumplContacto.setText(contacto.getFechaCumple());
             tvCorreoContacto.setText(contacto.getCorreo());
+
+            // Concatenar latitud y longitud del hogar en el mismo TextView
+            String ubicacionHogar = "Ubicación: " + "Latitud: " + contacto.getLatitudHogar() +
+                    ", Longitud: " + contacto.getLongitudHogar();
+            tvUbicacionContacto.setText(ubicacionHogar);
         }
 
         Button btnCompartir = rootView.findViewById(R.id.btnCompartirContacto);
         btnCompartir.setOnClickListener(v -> compartirContacto(contacto));
 
+        ImageView imgContactoHogar = rootView.findViewById(R.id.imgContactoHogar);
+        imgContactoHogar.setOnClickListener(v -> abrirUbicacionHogar());
+
+
         return rootView;
     }
+
+    public void abrirUbicacionHogar() {
+        if (contacto != null && contacto.getLatitudHogar() != 0 && contacto.getLongitudHogar() != 0) {
+            double latitud = contacto.getLatitudHogar();
+            double longitud = contacto.getLongitudHogar();
+
+            // Crea un intent para abrir Google Maps con la ubicación
+            Uri gmmIntentUri = Uri.parse("geo:" + latitud + "," + longitud + "?q=" + latitud + "," + longitud);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps"); // Asegura que se abra en Google Maps
+
+            // Verifica si hay una actividad que pueda manejar el intent
+            if (mapIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                startActivity(mapIntent);
+            } else {
+                // Maneja el caso en que Google Maps no esté instalado
+                // Puedes mostrar un mensaje de error o sugerir instalar la aplicación
+            }
+        }
+    }
+
 
     private void compartirContacto(Contactos contacto) {
         if (contacto != null) {
@@ -64,8 +96,14 @@ public class DetalleContactoFragment extends Fragment {
                     "\nTeléfono: " + contacto.getTelefono() +
                     "\nCumpleaños: " + contacto.getFechaCumple() +
                     "\nCorreo: " + contacto.getCorreo();
-            // Agrega el valor de ubicación si lo tienes en tu objeto de contacto
-            // textoCompartir += "\nUbicación: " + contacto.getUbicacion();
+
+            // Concatenar la ubicación del hogar si está disponible
+            if (contacto.getLatitudHogar() != 0 && contacto.getLongitudHogar() != 0) {
+                String ubicacionHogar = "Ubicación Hogar: " +
+                        "\nLatitud: " + contacto.getLatitudHogar() +
+                        "\nLongitud: " + contacto.getLongitudHogar();
+                textoCompartir += "\n" + ubicacionHogar;
+            }
 
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
@@ -75,6 +113,9 @@ public class DetalleContactoFragment extends Fragment {
             startActivity(Intent.createChooser(shareIntent, "Compartir Detalle de Contacto"));
         }
     }
+
+
+
 
     @Override
     public void onDestroyView() {
