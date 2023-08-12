@@ -34,11 +34,9 @@ import android.location.LocationManager;
 
 public class CrearContactoFragment extends Fragment implements LocationListener{
     private static final int REQUEST_CODE_GPS = 102;
-
     private FragmentCrearContactoBinding binding;
     private CrearContactoViewModel viewModel;
     private Calendar calendar;
-
     private LocationManager locationManager;
     private double latitudHogar, longitudHogar, latitudTrabajo, longitudTrabajo;
     private String tipoUbicacion;
@@ -95,9 +93,23 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
             binding.tvLatitudTrabajo.setText(String.valueOf(latitudTrabajo));
             binding.tvLongitudTrabajo.setText(String.valueOf(longitudTrabajo));
         }
-
         // Detener las actualizaciones de ubicación después de obtener los valores
         locationManager.removeUpdates(this);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // Puedes manejar diferentes estados del proveedor aquí si es necesario
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        // Puedes manejar la habilitación del proveedor de ubicación aquí si es necesario
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        // Puedes manejar la deshabilitación del proveedor de ubicación aquí si es necesario
     }
 
 

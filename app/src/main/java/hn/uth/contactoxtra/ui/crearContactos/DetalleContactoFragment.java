@@ -25,6 +25,7 @@ public class DetalleContactoFragment extends Fragment {
     private TextView tvCumplContacto;
     private TextView tvCorreoContacto;
     private TextView tvUbicacionContacto;
+    private TextView tvTrabajoContacto;
     private Contactos contacto;
 
     @Override
@@ -40,7 +41,7 @@ public class DetalleContactoFragment extends Fragment {
         tvCumplContacto = rootView.findViewById(R.id.tvCumplContacto);
         tvCorreoContacto = rootView.findViewById(R.id.tvCorreoContacto);
         tvUbicacionContacto = rootView.findViewById(R.id.tvUbicacionContacto);
-
+        tvTrabajoContacto = rootView.findViewById(R.id.tvTrabajoContacto);
         // Obtener el objeto Contactos de los argumentos del fragmento
         contacto = getArguments().getParcelable("contacto");
 
@@ -53,22 +54,40 @@ public class DetalleContactoFragment extends Fragment {
             tvCorreoContacto.setText(contacto.getCorreo());
 
             // Concatenar latitud y longitud del hogar en el mismo TextView
-            String ubicacionHogar = "Ubicación: " + "Latitud: " + contacto.getLatitudHogar() +
+            String ubicacionHogar = "Latitud: " + contacto.getLatitudHogar() +
                     ", Longitud: " + contacto.getLongitudHogar();
             tvUbicacionContacto.setText(ubicacionHogar);
+
+            String ubicacionTrabajo = "Latitud: " + contacto.getLatitudTrabajo() +
+                    ", Longitud: " + contacto.getLongitudTrabajo();
+            tvTrabajoContacto.setText(ubicacionTrabajo);
         }
 
         Button btnCompartir = rootView.findViewById(R.id.btnCompartirContacto);
         btnCompartir.setOnClickListener(v -> compartirContacto(contacto));
 
-        ImageView imgContactoHogar = rootView.findViewById(R.id.imgContactoHogar);
-        imgContactoHogar.setOnClickListener(v -> abrirUbicacionHogar());
+        Button btnAbrirMapa = rootView.findViewById(R.id.btnAbrirMapa);
+        btnAbrirMapa.setOnClickListener(v -> abrirUbicacionHogar());
 
+        Button btnMapaTrabajo = rootView.findViewById(R.id.btnMapaTrabajo);
+        btnMapaTrabajo.setOnClickListener(v -> abrirUbicacionTrabajo());
 
         return rootView;
     }
 
     public void abrirUbicacionHogar() {
+        if (contacto != null && contacto.getLatitudTrabajo() != 0 && contacto.getLongitudTrabajo() != 0) {
+            double latitud = contacto.getLatitudTrabajo();
+            double longitud = contacto.getLongitudTrabajo();
+
+            // Crea un intent para abrir Google Maps con la ubicación
+            Uri gmmIntentUri = Uri.parse("geo:" + latitud + "," + longitud + "?q=" + latitud + "," + longitud);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            startActivity(mapIntent);
+        }
+    }
+
+    public void abrirUbicacionTrabajo() {
         if (contacto != null && contacto.getLatitudHogar() != 0 && contacto.getLongitudHogar() != 0) {
             double latitud = contacto.getLatitudHogar();
             double longitud = contacto.getLongitudHogar();
@@ -76,15 +95,7 @@ public class DetalleContactoFragment extends Fragment {
             // Crea un intent para abrir Google Maps con la ubicación
             Uri gmmIntentUri = Uri.parse("geo:" + latitud + "," + longitud + "?q=" + latitud + "," + longitud);
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            mapIntent.setPackage("com.google.android.apps.maps"); // Asegura que se abra en Google Maps
-
-            // Verifica si hay una actividad que pueda manejar el intent
-            if (mapIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
-                startActivity(mapIntent);
-            } else {
-                // Maneja el caso en que Google Maps no esté instalado
-                // Puedes mostrar un mensaje de error o sugerir instalar la aplicación
-            }
+            startActivity(mapIntent);
         }
     }
 
@@ -103,6 +114,13 @@ public class DetalleContactoFragment extends Fragment {
                         "\nLatitud: " + contacto.getLatitudHogar() +
                         "\nLongitud: " + contacto.getLongitudHogar();
                 textoCompartir += "\n" + ubicacionHogar;
+            }
+
+            if (contacto.getLatitudTrabajo() != 0 && contacto.getLongitudTrabajo() != 0) {
+                String ubicacionTrabajo = "Ubicación Trabajo: " +
+                        "\nLatitud: " + contacto.getLatitudTrabajo() +
+                        "\nLongitud: " + contacto.getLongitudTrabajo();
+                textoCompartir += "\n" + ubicacionTrabajo;
             }
 
             Intent shareIntent = new Intent(Intent.ACTION_SEND);

@@ -25,7 +25,6 @@ import hn.uth.contactoxtra.databinding.FragmentContactosBinding;
 import hn.uth.contactoxtra.ui.OnItemClickListener;
 
 public class ContactosFragment extends Fragment implements OnItemClickListener<Contactos> {
-
     private FragmentContactosBinding binding;
     private ContactosAdapter adaptador;
     private ContactosViewModel viewModel;
@@ -43,8 +42,6 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
         setupRecyclerView();
         setupSearchView();
 
-
-
         FloatingActionButton fabAgregarContacto = root.findViewById(R.id.fabAgregarContacto);
         fabAgregarContacto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,8 +55,6 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
 
         return root;
     }
-
-
 
     private void setupRecyclerView(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -87,10 +82,6 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
         viewModel.buscarContacto(query)
                 .observe(getViewLifecycleOwner(), contactos -> adaptador.setItems(contactos));
     }
-
-
-
-
 
     @Override
     public void onDestroyView() {
