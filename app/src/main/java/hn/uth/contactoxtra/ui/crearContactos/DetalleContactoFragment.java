@@ -7,13 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -82,9 +78,9 @@ public class DetalleContactoFragment extends Fragment {
 
 
     public void abrirUbicacionHogar() {
-        if (contacto != null && contacto.getLatitudTrabajo() != 0 && contacto.getLongitudTrabajo() != 0) {
-            double latitud = contacto.getLatitudTrabajo();
-            double longitud = contacto.getLongitudTrabajo();
+        if (contacto != null && contacto.getLatitudHogar() != 0 && contacto.getLongitudHogar() != 0) {
+            double latitud = contacto.getLatitudHogar();
+            double longitud = contacto.getLongitudHogar();
 
             // Crea un intent para abrir Google Maps con la ubicación
             Uri gmmIntentUri = Uri.parse("geo:" + latitud + "," + longitud + "?q=" + latitud + "," + longitud);
@@ -94,9 +90,9 @@ public class DetalleContactoFragment extends Fragment {
     }
 
     public void abrirUbicacionTrabajo() {
-        if (contacto != null && contacto.getLatitudHogar() != 0 && contacto.getLongitudHogar() != 0) {
-            double latitud = contacto.getLatitudHogar();
-            double longitud = contacto.getLongitudHogar();
+        if (contacto != null && contacto.getLatitudTrabajo() != 0 && contacto.getLongitudTrabajo() != 0) {
+            double latitud = contacto.getLatitudTrabajo();
+            double longitud = contacto.getLongitudTrabajo();
 
             // Crea un intent para abrir Google Maps con la ubicación
             Uri gmmIntentUri = Uri.parse("geo:" + latitud + "," + longitud + "?q=" + latitud + "," + longitud);
