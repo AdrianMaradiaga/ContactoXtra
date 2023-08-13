@@ -1,6 +1,7 @@
 package hn.uth.contactoxtra.ui.crearContactos;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
@@ -19,8 +20,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import hn.uth.contactoxtra.R;
 import hn.uth.contactoxtra.database.Contactos;
@@ -47,6 +51,7 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
         // Ocultar el Bottom Navigation
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.GONE);
+        calendar = Calendar.getInstance();
 
         // Verificar si se pasó un contacto existente como argumento
         if (getArguments() != null) {
@@ -62,12 +67,17 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
                     binding.tvCumpleContacto.setText(contactoExistente.getFechaCumple());
 
                     // Rellenar ubicación de hogar
-                    binding.tvLatitudHogar.setText("Latitud: " + contactoExistente.getLatitudHogar());
-                    binding.tvLongitudHogar.setText("Longitud: " + contactoExistente.getLongitudHogar());
+                    double latitudHogar = contactoExistente.getLatitudHogar();
+                    double longitudHogar = contactoExistente.getLongitudHogar();
+                    binding.tvLatitudHogar.setText(String.valueOf(latitudHogar));
+                    binding.tvLongitudHogar.setText(String.valueOf(longitudHogar));
 
                     // Rellenar ubicación de trabajo
-                    binding.tvLatitudTrabajo.setText("Latitud: " + contactoExistente.getLatitudTrabajo());
-                    binding.tvLongitudTrabajo.setText("Longitud: " + contactoExistente.getLongitudTrabajo());
+                    double latitudTrabajo = contactoExistente.getLatitudTrabajo();
+                    double longitudTrabajo = contactoExistente.getLongitudTrabajo();
+                    binding.tvLatitudTrabajo.setText(String.valueOf(latitudTrabajo));
+                    binding.tvLongitudTrabajo.setText(String.valueOf(longitudTrabajo));
+
                 }
             }
         }
@@ -95,42 +105,60 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
         }
     }
 
+    private boolean hogarObtenido = false;
+    private boolean trabajoObtenido = false;
+
+
     @Override
     public void onLocationChanged(@NonNull android.location.Location location) {
         double latitud = location.getLatitude();
         double longitud = location.getLongitude();
+        Snackbar.make(binding.getRoot(), "Obteniendo ubicación...", Snackbar.LENGTH_SHORT).show();
 
-        if ("Hogar".equals(tipoUbicacion)) {
+        if ("Hogar".equals(tipoUbicacion) && !hogarObtenido) {
             latitudHogar = latitud;
             longitudHogar = longitud;
             binding.tvLatitudHogar.setText(String.valueOf(latitudHogar));
             binding.tvLongitudHogar.setText(String.valueOf(longitudHogar));
-        } else if ("Trabajo".equals(tipoUbicacion)) {
+            hogarObtenido = true;
+        } else if ("Trabajo".equals(tipoUbicacion) && !trabajoObtenido) {
             latitudTrabajo = latitud;
             longitudTrabajo = longitud;
             binding.tvLatitudTrabajo.setText(String.valueOf(latitudTrabajo));
             binding.tvLongitudTrabajo.setText(String.valueOf(longitudTrabajo));
+            trabajoObtenido = true;
         }
-        // Detener las actualizaciones de ubicación después de obtener los valores
-        locationManager.removeUpdates(this);
+        // Detener las actualizaciones de ubicación después de obtener los valores de ambas ubicaciones
+        if (hogarObtenido && trabajoObtenido) {
+            locationManager.removeUpdates(this);
+        }
     }
 
-    // Resto del código del onStatusChanged, onProviderEnabled, onProviderDisabled, showDatePickerDialog
+
 
     private void saveContact() {
         String nombre = binding.tilNombreContacto.getEditText().getText().toString();
         String apellido = binding.tilApellidoContacto.getEditText().getText().toString();
-        // Obtén los valores de los demás campos de acuerdo a tu Contacto
+        String correo = binding.tilCorreoContacto.getEditText().getText().toString();
+        String telefono = binding.tilTelefonoContacto.getEditText().getText().toString();
+        String fechaCumple = binding.tvCumpleContacto.getText().toString();
 
         if (contactoExistente != null) {
             // Actualizar los datos del contacto existente con los valores ingresados
             contactoExistente.setNombre(nombre);
             contactoExistente.setApellido(apellido);
-            // Actualiza los demás campos de acuerdo a la estructura de tu Contacto
-            contactoExistente.setLatitudHogar(latitudHogar);
-            contactoExistente.setLongitudHogar(longitudHogar);
-            contactoExistente.setLatitudTrabajo(latitudTrabajo);
-            contactoExistente.setLongitudTrabajo(longitudTrabajo);
+            contactoExistente.setCorreo(correo);
+            contactoExistente.setTelefono(telefono);
+            contactoExistente.setFechaCumple(fechaCumple);
+            // Actualiza las ubicaciones solo si se han obtenido de la ubicación previamente
+            if (latitudHogar != 0 || longitudHogar != 0) {
+                contactoExistente.setLatitudHogar(latitudHogar);
+                contactoExistente.setLongitudHogar(longitudHogar);
+            }
+            if (latitudTrabajo != 0 || longitudTrabajo != 0) {
+                contactoExistente.setLatitudTrabajo(latitudTrabajo);
+                contactoExistente.setLongitudTrabajo(longitudTrabajo);
+            }
 
             // Llama al método de actualización en el ViewModel
             viewModel.update(contactoExistente);
@@ -142,8 +170,30 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
         finish();
     }
 
+
     private void showDatePickerDialog() {
-        // Implementa el código para mostrar el diálogo de selección de fecha
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, monthOfYear);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateDateTextView();
+        };
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+
+        datePickerDialog.show();
+    }
+
+    private void updateDateTextView() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String formattedDate = dateFormat.format(calendar.getTime());
+        binding.tvCumpleContacto.setText(formattedDate);
     }
 
     private void finish() {
