@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -72,8 +75,11 @@ public class DetalleContactoFragment extends Fragment {
         Button btnMapaTrabajo = rootView.findViewById(R.id.btnMapaTrabajo);
         btnMapaTrabajo.setOnClickListener(v -> abrirUbicacionTrabajo());
 
+
         return rootView;
     }
+
+
 
     public void abrirUbicacionHogar() {
         if (contacto != null && contacto.getLatitudTrabajo() != 0 && contacto.getLongitudTrabajo() != 0) {

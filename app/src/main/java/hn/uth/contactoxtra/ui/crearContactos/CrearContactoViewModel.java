@@ -26,5 +26,8 @@ public class CrearContactoViewModel extends AndroidViewModel {
     public void insert(Contactos contactos) {
         repository.insert(contactos);
     }
+    public void update(Contactos actualizar){
+        repository.update(actualizar);
+    }
 
 }

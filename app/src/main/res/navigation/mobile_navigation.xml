@@ -35,6 +35,17 @@
         android:label="Ver detalles del contacto"
         tools:layout="@layout/fragment_detalle_contacto" />
 
+    <fragment
+        android:id="@+id/actualizarContactoFragment"
+        android:name="hn.uth.contactoxtra.ui.crearContactos.ActualizarContactoFragment"
+        android:label="Actualizar Contacto"
+        tools:layout="@layout/fragment_crear_contacto" />
+
+
+    <action
+        android:id="@+id/action_contactosFragment_to_actualizarContactoFragment"
+        app:destination="@id/actualizarContactoFragment" />
+
     <action
         android:id="@+id/action_contactosFragment_to_detalleContactoFragment"
         app:destination="@id/detalleContactoFragment" />

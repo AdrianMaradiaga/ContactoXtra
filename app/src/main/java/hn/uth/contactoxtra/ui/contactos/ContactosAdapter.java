@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,6 +72,16 @@ public class ContactosAdapter extends RecyclerView.Adapter<ContactosAdapter.View
                 NavController navController = Navigation.findNavController(v);
                 navController.navigate(R.id.action_contactosFragment_to_detalleContactoFragment, bundle);
             }
+        });
+
+        // Configurar el evento de clic en la imagen de actualización
+        holder.binding.imgActualizarContacto.setOnClickListener(v -> {
+            // Pasar el contacto seleccionado al fragmento de actualización
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("contacto", contactoItem);
+
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_contactosFragment_to_actualizarContactoFragment, bundle);
         });
     }
 
