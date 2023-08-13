@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_contactos" />
 
     <fragment
+        android:id="@+id/navigation_contactos_dispositivo"
+        android:name="hn.uth.contactoxtra.ui.contactosDispositivo.ContactosDispositivoFragment"
+        android:label="@string/title_contactos_dispositivo"
+        tools:layout="@layout/fragment_contactos_dispositivo" />
+
+    <fragment
         android:id="@+id/crearContactoFragment"
         android:name="hn.uth.contactoxtra.ui.crearContactos.CrearContactoFragment"
         android:label="Crear Contacto"
@@ -41,6 +47,9 @@
         android:label="Actualizar Contacto"
         tools:layout="@layout/fragment_crear_contacto" />
 
+    <action
+        android:id="@+id/action_contactosDispositivoFragment_to_crearContactoFragment"
+        app:destination="@id/crearContactoFragment" />
 
     <action
         android:id="@+id/action_contactosFragment_to_actualizarContactoFragment"
@@ -55,7 +64,8 @@
         app:destination="@id/crearContactoFragment" />
 
     <action
-        android:id="@+id/action_crearContactoFragment_to_contactosFragment"
-        app:destination="@id/navigation_contactos" />
+        android:id="@+id/action_crearContactoFragment_to_contactosDispositivoFragment"
+        app:destination="@id/navigation_contactos_dispositivo" />
+
 
 </navigation>

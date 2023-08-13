@@ -13,6 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -30,7 +31,6 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
     private ContactosViewModel viewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         binding = FragmentContactosBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -38,6 +38,9 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
 
         adaptador = new ContactosAdapter(getContext(), new ArrayList<>(), this, viewModel);
         viewModel.getContactosDataset().observe(getViewLifecycleOwner(), contactos -> adaptador.setItems(contactos));
+
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+        bottomNavigationView.setVisibility(View.VISIBLE);
 
         setupRecyclerView();
         setupSearchView();

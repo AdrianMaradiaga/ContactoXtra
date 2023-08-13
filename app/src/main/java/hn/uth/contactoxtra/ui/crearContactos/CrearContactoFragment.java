@@ -19,6 +19,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,14 +48,33 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
         binding = FragmentCrearContactoBinding.inflate(inflater, container, false);
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
+        Bundle args = getArguments();
+        if (args != null) {
+            String nombreContacto = args.getString("nombre_contacto");
+            String telefonoContacto = args.getString("telefono_contacto");
+            String correoContacto = args.getString("correo_contacto");
+
+            // Hacer lo que necesites con los datos recibidos
+            // Por ejemplo, puedes establecer los valores en los EditText correspondientes
+            binding.tilNombreContacto.getEditText().setText(nombreContacto);
+            binding.tilTelefonoContacto.getEditText().setText(telefonoContacto);
+            binding.tilCorreoContacto.getEditText().setText(correoContacto);
+        }
+
         binding.btnUbicacionHogar.setOnClickListener(v -> obtenerUbicacion("Hogar"));
         binding.btnUbicacionTrabajo.setOnClickListener(v -> obtenerUbicacion("Trabajo"));
 
         // Ocultar el Bottom Navigation
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.GONE);
+
+        binding.btnCumpleContacto.setOnClickListener(v -> showDatePickerDialog());
+
+        binding.btnGuardarContacto.setOnClickListener(v -> saveContact());
+
         return binding.getRoot();
     }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -81,6 +101,7 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
     public void onLocationChanged(@NonNull Location location) {
         double latitud = location.getLatitude();
         double longitud = location.getLongitude();
+        Snackbar.make(binding.getRoot(), "Obteniendo ubicación...", Snackbar.LENGTH_SHORT).show();
 
         if ("Hogar".equals(tipoUbicacion)) {
             latitudHogar = latitud;
@@ -169,7 +190,7 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
 
         // Navegar al fragmento de contactos
         NavController navController = Navigation.findNavController(requireView());
-        navController.navigate(R.id.action_crearContactoFragment_to_contactosFragment);
+        navController.navigate(R.id.action_crearContactoFragment_to_contactosDispositivoFragment);
     }
 
 

@@ -22,4 +22,5 @@
     <string name="lbl_compartir_contacto">Compartir Contacto</string>
     <string name="lbl_actualizar_contacto">Actualizar Contacto</string>
     <string name="lbl_buscar_contacto">Buscar contacto</string>
+    <string name="title_contactos_dispositivo">Contactos Dispositivo</string>
 </resources>
