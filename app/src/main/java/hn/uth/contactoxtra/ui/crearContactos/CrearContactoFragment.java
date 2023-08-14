@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,6 +161,7 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
     }
 
     private void saveContact() {
+        // Obtener los valores de los campos
         String nombre = binding.tilNombreContacto.getEditText().getText().toString();
         String apellido = binding.tilApellidoContacto.getEditText().getText().toString();
         String correo = binding.tilCorreoContacto.getEditText().getText().toString();
@@ -169,6 +171,29 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
         // Validar que los campos no estén vacíos
         if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() || telefono.isEmpty() || fechaCumple.isEmpty()) {
             Toast.makeText(requireContext(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Validar longitud mínima y máxima para nombre y apellido (por ejemplo, 2 a 30 caracteres)
+        if (nombre.length() < 2 || nombre.length() > 30) {
+            binding.tilNombreContacto.setError("El nombre debe tener entre 2 y 30 caracteres");
+            return;
+        }
+
+        if (apellido.length() < 2 || apellido.length() > 30) {
+            binding.tilApellidoContacto.setError("El apellido debe tener entre 2 y 30 caracteres");
+            return;
+        }
+
+        // Validar que el número de teléfono sea numérico y tenga una longitud válida (por ejemplo, 8 a 15 dígitos)
+        if (!TextUtils.isDigitsOnly(telefono) || telefono.length() < 8 || telefono.length() > 15) {
+            binding.tilTelefonoContacto.setError("Ingrese un número válido (8 a 15 dígitos)");
+            return;
+        }
+
+        // Validar que el correo tenga un formato válido
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            binding.tilCorreoContacto.setError("Ingrese un correo electrónico válido");
             return;
         }
 
@@ -188,10 +213,10 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
         binding.tilTelefonoContacto.getEditText().setText("");
         binding.tvCumpleContacto.setText("");
 
-        // Navegar al fragmento de contactos
         NavController navController = Navigation.findNavController(requireView());
-        navController.navigate(R.id.action_crearContactoFragment_to_contactosDispositivoFragment);
+        navController.popBackStack();
     }
+
 
 
     private void finish() {

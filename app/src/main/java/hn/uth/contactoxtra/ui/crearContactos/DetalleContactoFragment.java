@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import hn.uth.contactoxtra.R;
 import hn.uth.contactoxtra.database.Contactos;
@@ -86,6 +87,8 @@ public class DetalleContactoFragment extends Fragment {
             Uri gmmIntentUri = Uri.parse("geo:" + latitud + "," + longitud + "?q=" + latitud + "," + longitud);
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             startActivity(mapIntent);
+        }else{
+            Snackbar.make(requireView(), "No hay ubicaciones", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -98,6 +101,8 @@ public class DetalleContactoFragment extends Fragment {
             Uri gmmIntentUri = Uri.parse("geo:" + latitud + "," + longitud + "?q=" + latitud + "," + longitud);
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             startActivity(mapIntent);
+        }else{
+            Snackbar.make(requireView(), "No hay ubicaciones", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -131,11 +136,10 @@ public class DetalleContactoFragment extends Fragment {
             shareIntent.putExtra(Intent.EXTRA_TEXT, textoCompartir);
 
             startActivity(Intent.createChooser(shareIntent, "Compartir Detalle de Contacto"));
+        }else{
+            Snackbar.make(requireView(), "No hay valores que compartir", Snackbar.LENGTH_LONG).show();
         }
     }
-
-
-
 
     @Override
     public void onDestroyView() {
