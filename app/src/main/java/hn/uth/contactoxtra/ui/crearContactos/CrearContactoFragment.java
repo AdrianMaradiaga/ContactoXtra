@@ -28,6 +28,7 @@ import java.util.Locale;
 
 import hn.uth.contactoxtra.R;
 import hn.uth.contactoxtra.database.Contactos;
+import hn.uth.contactoxtra.database.Ubicacion;
 import hn.uth.contactoxtra.databinding.FragmentCrearContactoBinding;
 import android.location.Location;
 import android.location.LocationListener;
@@ -42,7 +43,8 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
     private LocationManager locationManager;
     private double latitudHogar, longitudHogar, latitudTrabajo, longitudTrabajo;
     private String tipoUbicacion;
-
+    private boolean hogarObtenido = false;
+    private boolean trabajoObtenido = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -199,12 +201,26 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
 
         // Crear un objeto Contacto con los datos ingresados
         Contactos nuevoContacto = new Contactos(nombre, apellido, correo, telefono, fechaCumple, 0, latitudHogar, longitudHogar, latitudTrabajo, longitudTrabajo);
+        // Crear objetos Ubicacion para ambas categorías
+        String persona = nuevoContacto.getNombre() + " " + nuevoContacto.getApellido();
 
+        Ubicacion ubicacionHogar = new Ubicacion(persona, "Hogar", latitudHogar, longitudHogar);
+        Ubicacion ubicacionTrabajo = new Ubicacion(persona, "Trabajo", latitudTrabajo, longitudTrabajo);
+
+        // Guardar las ubicaciones usando el ViewModel
+        viewModel.insert(ubicacionHogar);
+        viewModel.insert(ubicacionTrabajo);
         // Guardar el contacto usando el ViewModel
         viewModel.insert(nuevoContacto);
 
+        finish();
+    }
+
+
+
+    private void finish() {
         // Mostrar un mensaje de éxito
-        Toast.makeText(requireContext(), "Contacto guardado correctamente", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), "Contacto y ubicaciones guardados correctamente", Toast.LENGTH_SHORT).show();
 
         // Limpiar los campos
         binding.tilNombreContacto.getEditText().setText("");
@@ -217,18 +233,12 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
         navController.popBackStack();
     }
 
-
-
-    private void finish() {
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         // Mostrar el Bottom Navigation nuevamente al salir del fragmento
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.VISIBLE);
-
         binding = null;
     }
 }

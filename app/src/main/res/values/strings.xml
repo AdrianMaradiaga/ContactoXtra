@@ -23,4 +23,7 @@
     <string name="lbl_actualizar_contacto">Actualizar Contacto</string>
     <string name="lbl_buscar_contacto">Buscar contacto</string>
     <string name="title_contactos_dispositivo">Contactos Dispositivo</string>
+    <string name="lbl_longitud">Longitud</string>
+    <string name="lbl_latitud">Latitud</string>
+    <string name="lbl_usuario">Usuario</string>
 </resources>

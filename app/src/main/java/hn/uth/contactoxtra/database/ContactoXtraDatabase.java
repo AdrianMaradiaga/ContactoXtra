@@ -11,9 +11,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(version = 4, exportSchema = false, entities = {Contactos.class})
+@Database(version = 5, exportSchema = false, entities = {Contactos.class, Ubicacion.class})
 public abstract class ContactoXtraDatabase extends RoomDatabase {
     public abstract ContactosDao contactosDao();
+    public abstract UbicacionDao ubicacionDao();
 
     private static volatile ContactoXtraDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -31,7 +32,8 @@ public abstract class ContactoXtraDatabase extends RoomDatabase {
 
                             databaseWriteExecutor.execute(() -> {
                                 ContactosDao contactosDao = INSTANCE.contactosDao();
-
+                                UbicacionDao ubicacionDao = INSTANCE.ubicacionDao();
+                                ubicacionDao.deleteAll();
                                 contactosDao.deleteAll();
                             });
                         }

@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_ubicaciones"
-        android:name="hn.uth.contactoxtra.ui.home.HomeFragment"
+        android:name="hn.uth.contactoxtra.ui.ubicacion.UbicacionFragment"
         android:label="@string/title_ubicaciones"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_ubicaciones" />
 
     <fragment
         android:id="@+id/navigation_usuario"
