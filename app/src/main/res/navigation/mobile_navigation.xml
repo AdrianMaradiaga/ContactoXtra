@@ -47,6 +47,16 @@
         android:label="Actualizar Contacto"
         tools:layout="@layout/fragment_crear_contacto" />
 
+    <fragment
+        android:id="@+id/detalleUbicacionFragment"
+        android:name="hn.uth.contactoxtra.ui.ubicacion.DetalleUbicacionFragment"
+        android:label="Ver detalles de la ubicacion"
+        tools:layout="@layout/fragment_detalle_ubicacion" />
+
+    <action
+        android:id="@+id/action_ubicacionesFragment_to_detalleUbicacionFragment"
+        app:destination="@id/detalleUbicacionFragment" />
+
     <action
         android:id="@+id/action_contactosDispositivoFragment_to_crearContactoFragment"
         app:destination="@id/crearContactoFragment" />

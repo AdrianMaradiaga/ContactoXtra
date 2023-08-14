@@ -106,7 +106,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
     <TextView
-        android:id="@+id/tvUbicacionContacto"
+        android:id="@+id/tvUbicacionHogar"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
@@ -123,10 +123,10 @@
         app:icon="@drawable/baseline_share_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAbrirMapa" />
+        app:layout_constraintTop_toBottomOf="@+id/btnAbrirHogar" />
 
     <Button
-        android:id="@+id/btnAbrirMapa"
+        android:id="@+id/btnAbrirHogar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -134,7 +134,7 @@
         android:text="Abrir"
         app:icon="@drawable/ic_home_black_24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTrabajoContacto" />
+        app:layout_constraintTop_toBottomOf="@+id/tvUbicacionTrabajo" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -146,22 +146,22 @@
         app:layout_constraintTop_toBottomOf="@+id/imgContactoHogar" />
 
     <TextView
-        android:id="@+id/tvTrabajoContacto"
+        android:id="@+id/tvUbicacionTrabajo"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
-        app:layout_constraintStart_toStartOf="@+id/tvUbicacionContacto"
+        app:layout_constraintStart_toStartOf="@+id/tvUbicacionHogar"
         app:layout_constraintTop_toTopOf="@+id/imageView6"
         tools:text="Ubicacion de trabajo contacto" />
 
     <Button
-        android:id="@+id/btnMapaTrabajo"
+        android:id="@+id/btnAbrirTrabajo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="42dp"
         android:text="Abrir"
         app:icon="@drawable/cyan_baseline_business_24"
-        app:layout_constraintStart_toEndOf="@+id/btnAbrirMapa"
-        app:layout_constraintTop_toTopOf="@+id/btnAbrirMapa" />
+        app:layout_constraintStart_toEndOf="@+id/btnAbrirHogar"
+        app:layout_constraintTop_toTopOf="@+id/btnAbrirHogar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

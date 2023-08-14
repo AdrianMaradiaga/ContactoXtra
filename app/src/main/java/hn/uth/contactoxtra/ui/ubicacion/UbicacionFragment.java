@@ -11,13 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import hn.uth.contactoxtra.database.Ubicacion;
 import hn.uth.contactoxtra.databinding.FragmentUbicacionesBinding;
 import hn.uth.contactoxtra.ui.OnItemClickListener;
-
 import java.util.ArrayList;
-
 public class UbicacionFragment extends Fragment implements OnItemClickListener<Ubicacion> {
     private UbicacionAdapter adaptador;
     private UbicacionViewModel viewModel;
@@ -30,6 +27,7 @@ public class UbicacionFragment extends Fragment implements OnItemClickListener<U
 
         adaptador = new UbicacionAdapter(getContext(), new ArrayList<>(), this, viewModel);
         viewModel.getUbicacionDataset().observe(getViewLifecycleOwner(), ubicaciones -> adaptador.setItems(ubicaciones));
+
         setupRecyclerView();
         setupSearchView();
 

@@ -40,8 +40,8 @@ public class DetalleContactoFragment extends Fragment {
         tvTelefonoContacto = rootView.findViewById(R.id.tvTelefonoContacto);
         tvCumplContacto = rootView.findViewById(R.id.tvCumplContacto);
         tvCorreoContacto = rootView.findViewById(R.id.tvCorreoContacto);
-        tvUbicacionContacto = rootView.findViewById(R.id.tvUbicacionContacto);
-        tvTrabajoContacto = rootView.findViewById(R.id.tvTrabajoContacto);
+        tvUbicacionContacto = rootView.findViewById(R.id.tvUbicacionHogar);
+        tvTrabajoContacto = rootView.findViewById(R.id.tvUbicacionTrabajo);
         // Obtener el objeto Contactos de los argumentos del fragmento
         contacto = getArguments().getParcelable("contacto");
 
@@ -66,10 +66,10 @@ public class DetalleContactoFragment extends Fragment {
         Button btnCompartir = rootView.findViewById(R.id.btnCompartirContacto);
         btnCompartir.setOnClickListener(v -> compartirContacto(contacto));
 
-        Button btnAbrirMapa = rootView.findViewById(R.id.btnAbrirMapa);
+        Button btnAbrirMapa = rootView.findViewById(R.id.btnAbrirHogar);
         btnAbrirMapa.setOnClickListener(v -> abrirUbicacionHogar());
 
-        Button btnMapaTrabajo = rootView.findViewById(R.id.btnMapaTrabajo);
+        Button btnMapaTrabajo = rootView.findViewById(R.id.btnAbrirTrabajo);
         btnMapaTrabajo.setOnClickListener(v -> abrirUbicacionTrabajo());
 
 

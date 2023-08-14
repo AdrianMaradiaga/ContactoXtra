@@ -26,4 +26,8 @@
     <string name="lbl_longitud">Longitud</string>
     <string name="lbl_latitud">Latitud</string>
     <string name="lbl_usuario">Usuario</string>
+    <string name="lbl_persona_ubicacion">Persona a quien pertenece ubicacion</string>
+    <string name="lbl_categoria">Categoria</string>
+    <string name="lbl_abrir_lubrication">Abrir Lubrication</string>
+    <string name="lbl_compartir_ubicacion">Compartir Ubicacion</string>
 </resources>
