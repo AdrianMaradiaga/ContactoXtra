@@ -2,13 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_usuario"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".modulosusuario.CrearUsuarioFragment">
+
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="192dp"
-        android:layout_height="192dp"
+        android:layout_width="170dp"
+        android:layout_height="123dp"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,11 +74,25 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilCorreo"
+        android:layout_width="302dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Correo electronico"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tilTelefono">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:id="@+id/btnFecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="76dp"
         android:text="@string/lbl_fecha_de_cumplea_os"
         app:layout_constraintStart_toStartOf="@+id/tilTelefono"
         app:layout_constraintTop_toBottomOf="@+id/tilTelefono" />
@@ -93,37 +110,64 @@
 
     <Button
         android:id="@+id/btnUbicacion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/lbl_obtener_ubicacion"
+        android:layout_width="64dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="4dp"
+        app:icon="@drawable/baseline_add_home_24"
         app:layout_constraintStart_toStartOf="@+id/btnFecha"
         app:layout_constraintTop_toBottomOf="@+id/btnFecha" />
 
     <TextView
-        android:id="@+id/txtLatitud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_medium"
-        app:layout_constraintStart_toStartOf="@+id/txtCumple"
-        app:layout_constraintTop_toTopOf="@+id/btnUbicacion"
-        tools:text="Latitude" />
+        android:id="@+id/txtLongitud"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/txtLatitud"
+        app:layout_constraintTop_toTopOf="@+id/txtLatitud"
+        tools:text="Longitud Hogar" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+        android:id="@+id/txtLatitud"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/btnUbicacion"
+        app:layout_constraintTop_toTopOf="@+id/btnUbicacion"
+        tools:text="Latitud Hogar" />
+
+    <Button
+        android:id="@+id/btnUbicaciontrabajo"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/poppins_medium"
-        app:layout_constraintStart_toStartOf="@+id/txtLatitud"
-        app:layout_constraintTop_toBottomOf="@+id/txtLatitud"
-        tools:text="Longitud" />
+        app:icon="@drawable/baseline_add_business_24"
+        app:layout_constraintStart_toStartOf="@+id/btnUbicacion"
+        app:layout_constraintTop_toBottomOf="@+id/btnUbicacion" />
+
+
+    <TextView
+        android:id="@+id/txtLongitudtrabajo"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/txtLatitudtrabajo"
+        app:layout_constraintTop_toTopOf="@+id/txtLatitudtrabajo"
+        tools:text="Longitud Trabajo" />
+
+    <TextView
+        android:id="@+id/txtLatitudtrabajo"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/btnUbicaciontrabajo"
+        app:layout_constraintTop_toTopOf="@+id/btnUbicaciontrabajo"
+        tools:text="Latitud Trabajo"  />
 
     <Button
         android:id="@+id/btnGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="112dp"
         android:text="@string/guardar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
