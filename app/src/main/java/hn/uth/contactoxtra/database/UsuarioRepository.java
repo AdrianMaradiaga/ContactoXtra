@@ -45,4 +45,9 @@ public class UsuarioRepository {
     public LiveData<Usuario> getUsuarioLiveData() {
         return usuarioLiveData;
     }
+
+    // Método para obtener un usuario por su ID
+    public LiveData<Usuario> getUsuarioById(long usuarioId) {
+        return usuariosDao.getUsuarioById(usuarioId);
+    }
 }

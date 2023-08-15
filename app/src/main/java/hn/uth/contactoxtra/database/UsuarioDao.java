@@ -6,9 +6,6 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.List;
-
-
 @Dao
 public interface UsuarioDao {
     @Insert
@@ -26,4 +23,6 @@ public interface UsuarioDao {
     @Query("SELECT * FROM usuarios_table LIMIT 1")
     LiveData<Usuario> getUsuario();
 
+    @Query("SELECT * FROM usuarios_table WHERE usuario_id = :usuarioId")
+    LiveData<Usuario> getUsuarioById(long usuarioId);
 }

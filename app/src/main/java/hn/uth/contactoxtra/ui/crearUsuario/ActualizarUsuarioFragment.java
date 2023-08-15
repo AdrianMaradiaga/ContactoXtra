@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,24 +33,23 @@ import hn.uth.contactoxtra.R;
 import hn.uth.contactoxtra.database.Usuario;
 import hn.uth.contactoxtra.databinding.FragmentRegistroUsuarioBinding;
 
-public class CrearUsuarioFragment extends Fragment implements LocationListener {
-
+public class ActualizarUsuarioFragment extends Fragment implements LocationListener {
     private static final int REQUEST_CODE_GPS = 102;
     private FragmentRegistroUsuarioBinding binding;
-    private CrearUsuarioViewModel viewModel;
+    private CrearUsuarioViewModel usuarioViewModel;
     private Calendar calendar;
     private LocationManager locationManager;
-    private double latitudusuario, longitudusuario, latitudTrabajo, longitudTrabajo;
+    private double latitudHogar, longitudHogar, latitudTrabajo, longitudTrabajo;
     private String tipoUbicacion;
-    private enum UbicacionEstado {
-        NINGUNA, HOGAR, TRABAJO
-    }
-    private UbicacionEstado estadoUbicacion = UbicacionEstado.NINGUNA;
+    private Usuario usuarioExistente;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRegistroUsuarioBinding.inflate(inflater, container, false);
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        // Obtener el ViewModel asociado
+        usuarioViewModel = new ViewModelProvider(requireActivity()).get(CrearUsuarioViewModel.class);
 
         binding.btnUbicacion.setOnClickListener(v -> obtenerUbicacion("Hogar"));
         binding.btnUbicaciontrabajo.setOnClickListener(v -> obtenerUbicacion("Trabajo"));
@@ -57,65 +57,169 @@ public class CrearUsuarioFragment extends Fragment implements LocationListener {
         // Ocultar el Bottom Navigation
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.GONE);
+        calendar = Calendar.getInstance();
+
+        // Obtener el usuario existente de los argumentos si los hay
+        if (getArguments() != null) {
+            usuarioExistente = getArguments().getParcelable("usuario");
+            if (usuarioExistente != null) {
+                // Rellenar los campos con los datos del usuario existente
+                binding.tilNombre.getEditText().setText(usuarioExistente.getNombre());
+                binding.tilApellido.getEditText().setText(usuarioExistente.getApellido());
+                binding.tilTelefono.getEditText().setText(usuarioExistente.getTelefono());
+                binding.txtCumple.setText(usuarioExistente.getFechaCumple());
+                binding.tilCorreo.getEditText().setText(usuarioExistente.getCorreo());
+
+                // Rellenar ubicación de hogar
+                double latitudHogar = usuarioExistente.getLatitudusuario();
+                double longitudHogar = usuarioExistente.getLongitudusuario();
+                binding.txtLatitud.setText(String.valueOf(latitudHogar));
+                binding.txtLongitud.setText(String.valueOf(longitudHogar));
+
+                // Rellenar ubicación de trabajo
+                double latitudTrabajo = usuarioExistente.getLatitudTrabajo();
+                double longitudTrabajo = usuarioExistente.getLongitudTrabajo();
+                binding.txtLatitudtrabajo.setText(String.valueOf(latitudTrabajo));
+                binding.txtLongitudtrabajo.setText(String.valueOf(longitudTrabajo));
+
+            }
+        }
+
+        // Configurar el botón de guardar
+        binding.btnGuardar.setOnClickListener(v -> saveUsuario());
+        binding.btnFecha.setOnClickListener(v -> showDatePickerDialog());
         return binding.getRoot();
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(CrearUsuarioViewModel.class);
-        calendar = Calendar.getInstance();
-
-        binding.btnFecha.setOnClickListener(v -> showDatePickerDialog());
-
-        binding.btnGuardar.setOnClickListener(v -> saveUser());
-    }
 
     private void obtenerUbicacion(String tipoUbicacion) {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            estadoUbicacion = tipoUbicacion.equals("Hogar") ? UbicacionEstado.HOGAR : UbicacionEstado.TRABAJO;
             locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null);
+            this.tipoUbicacion = tipoUbicacion;
         } else {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_GPS);
         }
     }
 
+    private boolean hogarObtenido = false;
+    private boolean trabajoObtenido = false;
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
         double latitud = location.getLatitude();
         double longitud = location.getLongitude();
+        Snackbar.make(binding.getRoot(), "Obteniendo ubicación...", Snackbar.LENGTH_SHORT).show();
 
-        if (estadoUbicacion == UbicacionEstado.HOGAR) {
-            latitudusuario = latitud;
-            longitudusuario = longitud;
-            binding.txtLatitud.setText(String.valueOf(latitudusuario));
-            binding.txtLongitud.setText(String.valueOf(longitudusuario));
-        } else if (estadoUbicacion == UbicacionEstado.TRABAJO) {
+        if ("Hogar".equals(tipoUbicacion)) {
+            latitudHogar = latitud;
+            longitudHogar = longitud;
+            binding.txtLatitud.setText(String.valueOf(latitudHogar));
+            binding.txtLongitud.setText(String.valueOf(longitudHogar));
+        } else if ("Trabajo".equals(tipoUbicacion)) {
             latitudTrabajo = latitud;
             longitudTrabajo = longitud;
             binding.txtLatitudtrabajo.setText(String.valueOf(latitudTrabajo));
             binding.txtLongitudtrabajo.setText(String.valueOf(longitudTrabajo));
         }
-
-        // Detener las actualizaciones de ubicación después de obtener los valores
-        locationManager.removeUpdates(this);
-        estadoUbicacion = UbicacionEstado.NINGUNA; // Restablecer el estado de ubicación
+        // Detener las actualizaciones de ubicación después de obtener los valores de ambas ubicaciones
+        if (hogarObtenido && trabajoObtenido) {
+            locationManager.removeUpdates(this);
+        }
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        // Puedes manejar diferentes estados del proveedor aquí si es necesario
+        // Implementa aquí la lógica cuando cambia el estado del proveedor de ubicación
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        // Puedes manejar la habilitación del proveedor de ubicación aquí si es necesario
+        // Implementa aquí la lógica cuando se habilita el proveedor de ubicación
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        // Puedes manejar la deshabilitación del proveedor de ubicación aquí si es necesario
+        // Implementa aquí la lógica cuando se deshabilita el proveedor de ubicación
+    }
+    private void saveUsuario() {
+        String nombre = binding.tilNombre.getEditText().getText().toString().trim();
+        String apellido = binding.tilApellido.getEditText().getText().toString().trim();
+        String telefono = binding.tilTelefono.getEditText().getText().toString().trim();
+        String fechaCumple = binding.txtCumple.getText().toString().trim();
+        String correo = binding.tilCorreo.getEditText().getText().toString().trim();
+
+        // Validar campos, actualizar usuario y guardar en la base de datos
+        if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() || telefono.isEmpty() || fechaCumple.isEmpty()) {
+            Toast.makeText(requireContext(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Validar que los campos no sean solo espacios en blanco
+        if (nombre.trim().isEmpty() || apellido.trim().isEmpty() || correo.trim().isEmpty() || telefono.trim().isEmpty() || fechaCumple.trim().isEmpty()) {
+            Toast.makeText(requireContext(), "Los campos no pueden ser solo espacios en blanco", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (nombre.length() < 2 || nombre.length() > 30) {
+            binding.tilNombre.setError("El nombre debe tener entre 2 y 30 caracteres");
+            binding.tilApellido.setError(null); // Eliminar error en apellido
+            binding.tilTelefono.setError(null); // Eliminar error en teléfono
+            binding.tilCorreo.setError(null); // Eliminar error en correo
+            return;
+        }
+
+        if (apellido.length() < 2 || apellido.length() > 30) {
+            binding.tilApellido.setError("El apellido debe tener entre 2 y 30 caracteres");
+            binding.tilNombre.setError(null); // Eliminar error en nombre
+            binding.tilTelefono.setError(null); // Eliminar error en teléfono
+            binding.tilCorreo.setError(null); // Eliminar error en correo
+            return;
+        }
+
+        // Validar que el número de teléfono sea numérico y tenga una longitud válida (por ejemplo, 8 a 15 dígitos)
+        if (!TextUtils.isDigitsOnly(telefono) || telefono.length() < 8 || telefono.length() > 15) {
+            binding.tilTelefono.setError("Ingrese un número válido (8 a 15 dígitos)");
+            binding.tilNombre.setError(null); // Eliminar error en nombre
+            binding.tilApellido.setError(null); // Eliminar error en apellido
+            binding.tilCorreo.setError(null); // Eliminar error en correo
+            return;
+        }
+
+        // Validar que el correo tenga un formato válido
+        if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            binding.tilCorreo.setError("Ingrese un correo electrónico válido");
+            binding.tilNombre.setError(null); // Eliminar error en nombre
+            binding.tilApellido.setError(null); // Eliminar error en apellido
+            binding.tilTelefono.setError(null); // Eliminar error en teléfono
+            return;
+        }
+
+        if (usuarioExistente != null) {
+            // Actualizar los datos del usuario existente con los valores ingresados
+            usuarioExistente.setNombre(nombre);
+            usuarioExistente.setApellido(apellido);
+            usuarioExistente.setTelefono(telefono);
+            usuarioExistente.setFechaCumple(fechaCumple);
+            usuarioExistente.setCorreo(correo);
+
+            // Actualiza las ubicaciones solo si se han obtenido de la ubicación previamente
+            if (latitudHogar != 0 || longitudHogar != 0) {
+                usuarioExistente.setLatitudusuario(latitudHogar);
+                usuarioExistente.setLongitudusuario(longitudHogar);
+            }
+            if (latitudTrabajo != 0 || longitudTrabajo != 0) {
+                usuarioExistente.setLatitudTrabajo(latitudTrabajo);
+                usuarioExistente.setLongitudTrabajo(longitudTrabajo);
+            }
+
+            // Llama al método de actualización en el ViewModel
+            usuarioViewModel.update(usuarioExistente);
+
+            // Mostrar mensaje de éxito y navegar hacia atrás
+            Toast.makeText(requireContext(), "Usuario actualizado correctamente", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(binding.btnGuardar).navigateUp();
+        }
     }
 
     private void showDatePickerDialog() {
@@ -143,93 +247,11 @@ public class CrearUsuarioFragment extends Fragment implements LocationListener {
         binding.txtCumple.setText(formattedDate);
     }
 
-    private void saveUser() {
-        // Obtener los valores de los campos
-        String nombre = binding.tilNombre.getEditText().getText().toString().trim();
-        String apellido = binding.tilApellido.getEditText().getText().toString().trim();
-        String correo = binding.tilCorreo.getEditText().getText().toString().trim();
-        String telefono = binding.tilTelefono.getEditText().getText().toString().trim();
-        String fechaCumple = binding.txtCumple.getText().toString().trim();
-
-        // Validar campos, crear usuario y guardar en la base de datos
-        if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() || telefono.isEmpty() || fechaCumple.isEmpty()) {
-            Toast.makeText(requireContext(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Validar que los campos no sean solo espacios en blanco
-        if (nombre.trim().isEmpty() || apellido.trim().isEmpty() || correo.trim().isEmpty() || telefono.trim().isEmpty() || fechaCumple.trim().isEmpty()) {
-            Toast.makeText(requireContext(), "Los campos no pueden ser solo espacios en blanco", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-
-        // Validar longitud mínima y máxima para nombre y apellido (por ejemplo, 2 a 30 caracteres)
-        if (nombre.length() < 2 || nombre.length() > 30) {
-            binding.tilNombre.setError("El nombre debe tener entre 2 y 30 caracteres");
-            binding.tilApellido.setError(null); // Eliminar error en apellido
-            binding.tilTelefono.setError(null); // Eliminar error en teléfono
-            binding.tilCorreo.setError(null); // Eliminar error en correo
-            return;
-        }
-
-        // Validar longitud mínima y máxima para apellido (por ejemplo, 2 a 30 caracteres)
-        if (apellido.length() < 2 || apellido.length() > 30) {
-            binding.tilApellido.setError("El apellido debe tener entre 2 y 30 caracteres");
-            binding.tilNombre.setError(null); // Eliminar error en nombre
-            binding.tilTelefono.setError(null); // Eliminar error en teléfono
-            binding.tilCorreo.setError(null); // Eliminar error en correo
-            return;
-        }
-
-        // Validar que el número de teléfono sea numérico y tenga una longitud válida (por ejemplo, 8 a 15 dígitos)
-        if (!TextUtils.isDigitsOnly(telefono) || telefono.length() < 8 || telefono.length() > 15) {
-            binding.tilTelefono.setError("Ingrese un número válido (8 a 15 dígitos)");
-            binding.tilNombre.setError(null); // Eliminar error en nombre
-            binding.tilApellido.setError(null); // Eliminar error en apellido
-            binding.tilCorreo.setError(null); // Eliminar error en correo
-            return;
-        }
-
-        // Validar que el correo tenga un formato válido
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
-            binding.tilCorreo.setError("Ingrese un correo electrónico válido");
-            binding.tilNombre.setError(null); // Eliminar error en nombre
-            binding.tilApellido.setError(null); // Eliminar error en apellido
-            binding.tilTelefono.setError(null); // Eliminar error en teléfono
-            return;
-        }
-
-        // Si todas las validaciones son exitosas, proceder con el guardado
-        // Crear un objeto Usuario con los datos ingresados y las ubicaciones
-        Usuario nuevoUsuario = new Usuario(nombre, apellido, correo, telefono, fechaCumple,  latitudusuario, longitudusuario, latitudTrabajo, longitudTrabajo);
-
-        // Guardar el Usuario usando el ViewModel
-        viewModel.insert(nuevoUsuario);
-
-        // Mostrar un mensaje de éxito
-        Toast.makeText(requireContext(), "Usuario guardado correctamente", Toast.LENGTH_SHORT).show();
-
-        // Limpiar los campos
-        binding.tilNombre.getEditText().setText("");
-        binding.tilApellido.getEditText().setText("");
-        binding.tilCorreo.getEditText().setText("");
-        binding.tilTelefono.getEditText().setText("");
-        binding.txtCumple.setText("");
-
-        // Regresar a la pantalla anterior
-        NavController navController = Navigation.findNavController(requireView());
-        navController.popBackStack();
-    }
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Mostrar el Bottom Navigation nuevamente al salir del fragmento
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.VISIBLE);
-
         binding = null;
     }
 }

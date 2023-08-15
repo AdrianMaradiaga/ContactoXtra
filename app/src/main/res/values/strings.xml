@@ -30,4 +30,7 @@
     <string name="lbl_categoria">Categoria</string>
     <string name="lbl_abrir_lubrication">Abrir Lubrication</string>
     <string name="lbl_compartir_ubicacion">Compartir Ubicacion</string>
+    <string name="lbl_correo_electronico">Correo electronico</string>
+    <string name="lbl_crear_usuario">Crear Usuario</string>
+    <string name="lbl_editar_usuario">Editar Usuario</string>
 </resources>

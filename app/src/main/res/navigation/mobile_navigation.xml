@@ -58,6 +58,16 @@
         android:name="hn.uth.contactoxtra.ui.crearUsuario.CrearUsuarioFragment"
         android:label="CrearUsuarioFragment" />
 
+    <fragment
+        android:id="@+id/actualizarUsuarioFragment"
+        android:name="hn.uth.contactoxtra.ui.crearUsuario.ActualizarUsuarioFragment"
+        android:label="Actualizar Usuario"
+        tools:layout="@layout/fragment_registro_usuario" />
+
+    <action
+        android:id="@+id/action_fragmentActual_to_actualizarUsuarioFragment"
+        app:destination="@id/actualizarUsuarioFragment" />
+
     <action
         android:id="@+id/action_fragmentActual_to_crearUsuarioFragment"
         app:destination="@id/crearUsuarioFragment" />

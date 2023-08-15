@@ -38,6 +38,15 @@ public class UsuarioFragment extends Fragment {
         usuarioViewModel.getUsuarioLiveData().observe(getViewLifecycleOwner(), new Observer<Usuario>() {
             @Override
             public void onChanged(Usuario usuario) {
+                // Mostrar u ocultar los botones según la existencia del usuario
+                if (usuarioExists(usuario)) {
+                    binding.btnAccionUsuario.setVisibility(View.GONE);
+                    binding.btnEditarUsuario.setVisibility(View.VISIBLE);
+                } else {
+                    binding.btnAccionUsuario.setVisibility(View.VISIBLE);
+                    binding.btnEditarUsuario.setVisibility(View.GONE);
+                }
+
                 if (usuario != null) {
                     binding.tvNombre.setText(usuario.getNombre());
                     binding.tvApellido.setText(usuario.getApellido());
@@ -48,12 +57,13 @@ public class UsuarioFragment extends Fragment {
                     String usuarioHogar = "Latitud: " + usuario.getLatitudusuario()
                             + ", Longitud: " + usuario.getLongitudusuario();
 
+                    String ubicacionTrabajo = "Latitud: " + usuario.getLatitudTrabajo() +
+                            ", Longitud: " + usuario.getLongitudTrabajo();
+                    binding.tvTrabajoUsuario.setText(ubicacionTrabajo);
                     binding.tvUbicacionUsuario.setText(usuarioHogar);
-
                 }
             }
         });
-
 
         // Configura acciones para botones u otros elementos de la interfaz
         binding.btnAccionUsuario.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +76,26 @@ public class UsuarioFragment extends Fragment {
                 navController.navigate(R.id.action_fragmentActual_to_crearUsuarioFragment);
             }
         });
+
+        binding.btnEditarUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Obtén el NavController desde el View actual
+                NavController navController = Navigation.findNavController(v);
+
+                // Navegar a ActualizarUsuarioFragment
+
+                // Crea un Bundle para pasar el objeto Usuario al fragmento ActualizarUsuarioFragment
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("usuario", usuarioViewModel.getUsuarioLiveData().getValue());
+
+                // Navegar a ActualizarUsuarioFragment con el argumento
+                navController.navigate(R.id.action_fragmentActual_to_actualizarUsuarioFragment, bundle);
+            }
+        });
+
+
+
     }
 
     @Override
@@ -73,4 +103,10 @@ public class UsuarioFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    private boolean usuarioExists(Usuario usuario) {
+        // Verificar si el usuario observado desde el LiveData es nulo o no
+        return usuario != null;
+    }
+
 }

@@ -27,4 +27,9 @@ public class UsuarioViewModel extends AndroidViewModel {
     public void insert(Usuario usuario){
         usuarioRepository.insert(usuario);
     }
+
+    // Método para verificar la existencia de un usuario por su ID
+    public LiveData<Usuario> getUsuarioById(long usuarioId) {
+        return usuarioRepository.getUsuarioById(usuarioId);
+    }
 }
