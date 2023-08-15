@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -13,21 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-
 import hn.uth.contactoxtra.R;
 import hn.uth.contactoxtra.database.Contactos;
 import hn.uth.contactoxtra.databinding.FragmentCrearContactoBinding;
@@ -155,38 +150,57 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
 
 
     private void saveContact() {
-        String nombre = binding.tilNombreContacto.getEditText().getText().toString();
-        String apellido = binding.tilApellidoContacto.getEditText().getText().toString();
-        String correo = binding.tilCorreoContacto.getEditText().getText().toString();
-        String telefono = binding.tilTelefonoContacto.getEditText().getText().toString();
-        String fechaCumple = binding.tvCumpleContacto.getText().toString();
+        String nombre = binding.tilNombreContacto.getEditText().getText().toString().trim();
+        String apellido = binding.tilApellidoContacto.getEditText().getText().toString().trim();
+        String correo = binding.tilCorreoContacto.getEditText().getText().toString().trim();
+        String telefono = binding.tilTelefonoContacto.getEditText().getText().toString().trim();
+        String fechaCumple = binding.tvCumpleContacto.getText().toString().trim();
 
-        // Validar que los campos no estén vacíos
+// Validar campos, actualizar contacto y guardar en la base de datos
         if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() || telefono.isEmpty() || fechaCumple.isEmpty()) {
             Toast.makeText(requireContext(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
             return;
         }
 
+// Validar que los campos no sean solo espacios en blanco
+        if (nombre.trim().isEmpty() || apellido.trim().isEmpty() || correo.trim().isEmpty() || telefono.trim().isEmpty() || fechaCumple.trim().isEmpty()) {
+            Toast.makeText(requireContext(), "Los campos no pueden ser solo espacios en blanco", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         // Validar longitud mínima y máxima para nombre y apellido (por ejemplo, 2 a 30 caracteres)
         if (nombre.length() < 2 || nombre.length() > 30) {
             binding.tilNombreContacto.setError("El nombre debe tener entre 2 y 30 caracteres");
+            binding.tilApellidoContacto.setError(null); // Eliminar error en apellido
+            binding.tilTelefonoContacto.setError(null); // Eliminar error en teléfono
+            binding.tilCorreoContacto.setError(null); // Eliminar error en correo
             return;
         }
 
         if (apellido.length() < 2 || apellido.length() > 30) {
             binding.tilApellidoContacto.setError("El apellido debe tener entre 2 y 30 caracteres");
+            binding.tilNombreContacto.setError(null); // Eliminar error en nombre
+            binding.tilTelefonoContacto.setError(null); // Eliminar error en teléfono
+            binding.tilCorreoContacto.setError(null); // Eliminar error en correo
             return;
         }
 
         // Validar que el número de teléfono sea numérico y tenga una longitud válida (por ejemplo, 8 a 15 dígitos)
         if (!TextUtils.isDigitsOnly(telefono) || telefono.length() < 8 || telefono.length() > 15) {
             binding.tilTelefonoContacto.setError("Ingrese un número válido (8 a 15 dígitos)");
+            binding.tilNombreContacto.setError(null); // Eliminar error en nombre
+            binding.tilApellidoContacto.setError(null); // Eliminar error en apellido
+            binding.tilCorreoContacto.setError(null); // Eliminar error en correo
             return;
         }
 
         // Validar que el correo tenga un formato válido
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
             binding.tilCorreoContacto.setError("Ingrese un correo electrónico válido");
+            binding.tilNombreContacto.setError(null); // Eliminar error en nombre
+            binding.tilApellidoContacto.setError(null); // Eliminar error en apellido
+            binding.tilTelefonoContacto.setError(null); // Eliminar error en teléfono
             return;
         }
 
@@ -245,7 +259,6 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
     }
 
     private void finish() {
-        // Método personalizado utilizado para realizar alguna acción adicional al finalizar el fragmento
     }
 
     @Override
