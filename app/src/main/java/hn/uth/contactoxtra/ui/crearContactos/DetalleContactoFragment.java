@@ -42,6 +42,7 @@ public class DetalleContactoFragment extends Fragment {
         tvCorreoContacto = rootView.findViewById(R.id.tvCorreoContacto);
         tvUbicacionContacto = rootView.findViewById(R.id.tvUbicacionHogar);
         tvTrabajoContacto = rootView.findViewById(R.id.tvUbicacionTrabajo);
+
         // Obtener el objeto Contactos de los argumentos del fragmento
         contacto = getArguments().getParcelable("contacto");
 
@@ -72,11 +73,8 @@ public class DetalleContactoFragment extends Fragment {
         Button btnMapaTrabajo = rootView.findViewById(R.id.btnAbrirTrabajo);
         btnMapaTrabajo.setOnClickListener(v -> abrirUbicacionTrabajo());
 
-
         return rootView;
     }
-
-
 
     public void abrirUbicacionHogar() {
         if (contacto != null && contacto.getLatitudHogar() != 0 && contacto.getLongitudHogar() != 0) {
@@ -105,7 +103,6 @@ public class DetalleContactoFragment extends Fragment {
             Snackbar.make(requireView(), "No hay ubicaciones", Snackbar.LENGTH_LONG).show();
         }
     }
-
 
     private void compartirContacto(Contactos contacto) {
         if (contacto != null) {

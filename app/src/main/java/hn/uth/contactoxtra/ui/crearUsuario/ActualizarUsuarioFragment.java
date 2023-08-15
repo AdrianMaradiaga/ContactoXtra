@@ -48,13 +48,11 @@ public class ActualizarUsuarioFragment extends Fragment implements LocationListe
         binding = FragmentRegistroUsuarioBinding.inflate(inflater, container, false);
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        // Obtener el ViewModel asociado
         usuarioViewModel = new ViewModelProvider(requireActivity()).get(CrearUsuarioViewModel.class);
 
         binding.btnUbicacion.setOnClickListener(v -> obtenerUbicacion("Hogar"));
         binding.btnUbicaciontrabajo.setOnClickListener(v -> obtenerUbicacion("Trabajo"));
 
-        // Ocultar el Bottom Navigation
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.GONE);
         calendar = Calendar.getInstance();
@@ -81,17 +79,13 @@ public class ActualizarUsuarioFragment extends Fragment implements LocationListe
                 double longitudTrabajo = usuarioExistente.getLongitudTrabajo();
                 binding.txtLatitudtrabajo.setText(String.valueOf(latitudTrabajo));
                 binding.txtLongitudtrabajo.setText(String.valueOf(longitudTrabajo));
-
             }
         }
-
         // Configurar el botón de guardar
         binding.btnGuardar.setOnClickListener(v -> saveUsuario());
         binding.btnFecha.setOnClickListener(v -> showDatePickerDialog());
         return binding.getRoot();
     }
-
-
 
     private void obtenerUbicacion(String tipoUbicacion) {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -122,7 +116,6 @@ public class ActualizarUsuarioFragment extends Fragment implements LocationListe
             binding.txtLatitudtrabajo.setText(String.valueOf(latitudTrabajo));
             binding.txtLongitudtrabajo.setText(String.valueOf(longitudTrabajo));
         }
-        // Detener las actualizaciones de ubicación después de obtener los valores de ambas ubicaciones
         if (hogarObtenido && trabajoObtenido) {
             locationManager.removeUpdates(this);
         }
@@ -130,17 +123,14 @@ public class ActualizarUsuarioFragment extends Fragment implements LocationListe
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        // Implementa aquí la lógica cuando cambia el estado del proveedor de ubicación
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        // Implementa aquí la lógica cuando se habilita el proveedor de ubicación
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        // Implementa aquí la lógica cuando se deshabilita el proveedor de ubicación
     }
     private void saveUsuario() {
         String nombre = binding.tilNombre.getEditText().getText().toString().trim();
@@ -237,7 +227,6 @@ public class ActualizarUsuarioFragment extends Fragment implements LocationListe
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
         );
-
         datePickerDialog.show();
     }
 

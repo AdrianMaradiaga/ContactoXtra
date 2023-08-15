@@ -10,7 +10,6 @@ import hn.uth.contactoxtra.database.Usuario;
 import hn.uth.contactoxtra.database.UsuarioRepository;
 
 public class CrearUsuarioViewModel extends AndroidViewModel {
-
     private UsuarioRepository usuarioRepository;
     private LiveData<Usuario> usuarioLiveData;
 
@@ -27,6 +26,7 @@ public class CrearUsuarioViewModel extends AndroidViewModel {
     public void insert(Usuario usuario){
         usuarioRepository.insert(usuario);
     }
+
     public void update(Usuario usuario){
         usuarioRepository.update(usuario);
     }

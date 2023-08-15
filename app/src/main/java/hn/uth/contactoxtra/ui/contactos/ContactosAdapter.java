@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +22,6 @@ import hn.uth.contactoxtra.databinding.ContactoItemBinding;
 import hn.uth.contactoxtra.ui.OnItemClickListener;
 
 public class ContactosAdapter extends RecyclerView.Adapter<ContactosAdapter.ViewHolder> {
-
     private List<Contactos> dataset;
     private OnItemClickListener<Contactos> manejadorContactoClick;
     private Context context;
@@ -114,7 +112,6 @@ public class ContactosAdapter extends RecyclerView.Adapter<ContactosAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         ContactoItemBinding binding;
 
         public ViewHolder(@NonNull ContactoItemBinding itemView) {

@@ -16,7 +16,6 @@ import hn.uth.contactoxtra.database.UbicacionRepository;
 public class CrearContactoViewModel extends AndroidViewModel {
     private ContactosRepository repository;
     private UbicacionRepository repositoryUbicacion;
-
     private LiveData<List<Contactos>> allContactos;
 
     public CrearContactoViewModel(@NonNull Application app){
@@ -24,6 +23,7 @@ public class CrearContactoViewModel extends AndroidViewModel {
         this.repository = new ContactosRepository(app);
         this.repositoryUbicacion = new UbicacionRepository(app);
     }
+
     public LiveData<List<Contactos>> getAllContactos() {
         return allContactos;
     }
@@ -31,6 +31,7 @@ public class CrearContactoViewModel extends AndroidViewModel {
     public void insert(Contactos contactos) {
         repository.insert(contactos);
     }
+
     public void insert(Ubicacion ubicacion) {
         repositoryUbicacion.insert(ubicacion);
     }
@@ -38,5 +39,4 @@ public class CrearContactoViewModel extends AndroidViewModel {
     public void update(Contactos actualizar){
         repository.update(actualizar);
     }
-
 }

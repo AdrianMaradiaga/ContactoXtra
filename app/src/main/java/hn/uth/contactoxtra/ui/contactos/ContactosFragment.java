@@ -35,7 +35,6 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
         View root = binding.getRoot();
 
         viewModel = new ViewModelProvider(this).get(ContactosViewModel.class);
-
         adaptador = new ContactosAdapter(getContext(), new ArrayList<>(), this, viewModel);
         viewModel.getContactosDataset().observe(getViewLifecycleOwner(), contactos -> adaptador.setItems(contactos));
 
@@ -49,13 +48,10 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
         fabAgregarContacto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Obtener el NavController
                 NavController navController = Navigation.findNavController(view);
-                // Navegar al fragmento CrearContactoFragment
                 navController.navigate(R.id.action_fragmentActual_to_crearContactoFragment);
             }
         });
-
         return root;
     }
 
@@ -94,7 +90,5 @@ public class ContactosFragment extends Fragment implements OnItemClickListener<C
 
     @Override
     public void onItemClick(Contactos data) {
-
     }
-
 }

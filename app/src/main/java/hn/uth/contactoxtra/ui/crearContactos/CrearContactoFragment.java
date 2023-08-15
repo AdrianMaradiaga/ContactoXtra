@@ -57,8 +57,6 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
             String telefonoContacto = args.getString("telefono_contacto");
             String correoContacto = args.getString("correo_contacto");
 
-            // Hacer lo que necesites con los datos recibidos
-            // Por ejemplo, puedes establecer los valores en los EditText correspondientes
             binding.tilNombreContacto.getEditText().setText(nombreContacto);
             binding.tilTelefonoContacto.getEditText().setText(telefonoContacto);
             binding.tilCorreoContacto.getEditText().setText(correoContacto);
@@ -67,7 +65,6 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
         binding.btnUbicacionHogar.setOnClickListener(v -> obtenerUbicacion("Hogar"));
         binding.btnUbicacionTrabajo.setOnClickListener(v -> obtenerUbicacion("Trabajo"));
 
-        // Ocultar el Bottom Navigation
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.GONE);
 
@@ -94,7 +91,7 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
     private void obtenerUbicacion(String tipoUbicacion) {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null);
-            this.tipoUbicacion = tipoUbicacion; // Usar la variable de instancia
+            this.tipoUbicacion = tipoUbicacion;
         } else {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_GPS);
         }
@@ -117,25 +114,20 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
             binding.tvLatitudTrabajo.setText(String.valueOf(latitudTrabajo));
             binding.tvLongitudTrabajo.setText(String.valueOf(longitudTrabajo));
         }
-        // Detener las actualizaciones de ubicación después de obtener los valores
         locationManager.removeUpdates(this);
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        // Puedes manejar diferentes estados del proveedor aquí si es necesario
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        // Puedes manejar la habilitación del proveedor de ubicación aquí si es necesario
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        // Puedes manejar la deshabilitación del proveedor de ubicación aquí si es necesario
     }
-
 
     private void showDatePickerDialog() {
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
@@ -181,7 +173,6 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
             Toast.makeText(requireContext(), "Los campos no pueden ser solo espacios en blanco", Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         // Validar longitud mínima y máxima para nombre y apellido (por ejemplo, 2 a 30 caracteres)
         if (nombre.length() < 2 || nombre.length() > 30) {
@@ -234,8 +225,6 @@ public class CrearContactoFragment extends Fragment implements LocationListener{
 
         finish();
     }
-
-
 
     private void finish() {
         // Mostrar un mensaje de éxito

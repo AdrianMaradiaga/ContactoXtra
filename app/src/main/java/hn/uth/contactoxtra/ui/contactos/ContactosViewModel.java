@@ -9,7 +9,6 @@ import hn.uth.contactoxtra.database.Contactos;
 import hn.uth.contactoxtra.database.ContactosRepository;
 
 public class ContactosViewModel extends AndroidViewModel {
-
     private ContactosRepository repository;
     private final LiveData<List<Contactos>> contactosDataset;
 
@@ -26,11 +25,10 @@ public class ContactosViewModel extends AndroidViewModel {
     public LiveData<List<Contactos>> getContactosDataset(){
         return contactosDataset;
     }
+
     public LiveData<List<Contactos>> buscarContacto(String query) {
         return repository.buscarContacto("%" + query + "%");
     }
-
-
 
     public void insert(Contactos contacto) {
         repository.insert(contacto);

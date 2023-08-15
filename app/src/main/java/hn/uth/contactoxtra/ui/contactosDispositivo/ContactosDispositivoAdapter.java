@@ -50,7 +50,6 @@ public class ContactosDispositivoAdapter extends RecyclerView.Adapter<ContactosD
             // Obtener el NavController y navegar al fragmento de CrearContactoFragment
             NavController navController = Navigation.findNavController(view);
             navController.navigate(R.id.crearContactoFragment, args);
-
         });
     }
 

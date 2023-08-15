@@ -74,7 +74,6 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
                     double longitudTrabajo = contactoExistente.getLongitudTrabajo();
                     binding.tvLatitudTrabajo.setText(String.valueOf(latitudTrabajo));
                     binding.tvLongitudTrabajo.setText(String.valueOf(longitudTrabajo));
-
                 }
             }
         }
@@ -105,7 +104,6 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
     private boolean hogarObtenido = false;
     private boolean trabajoObtenido = false;
 
-
     @Override
     public void onLocationChanged(@NonNull android.location.Location location) {
         double latitud = location.getLatitude();
@@ -131,23 +129,17 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
         }
     }
 
-
-
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        // Implementa aquí la lógica cuando cambia el estado del proveedor de ubicación
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        // Implementa aquí la lógica cuando se habilita el proveedor de ubicación
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        // Implementa aquí la lógica cuando se deshabilita el proveedor de ubicación
     }
-
 
     private void saveContact() {
         String nombre = binding.tilNombreContacto.getEditText().getText().toString().trim();
@@ -156,18 +148,17 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
         String telefono = binding.tilTelefonoContacto.getEditText().getText().toString().trim();
         String fechaCumple = binding.tvCumpleContacto.getText().toString().trim();
 
-// Validar campos, actualizar contacto y guardar en la base de datos
+        // Validar campos, actualizar contacto y guardar en la base de datos
         if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() || telefono.isEmpty() || fechaCumple.isEmpty()) {
             Toast.makeText(requireContext(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
             return;
         }
 
-// Validar que los campos no sean solo espacios en blanco
+        // Validar que los campos no sean solo espacios en blanco
         if (nombre.trim().isEmpty() || apellido.trim().isEmpty() || correo.trim().isEmpty() || telefono.trim().isEmpty() || fechaCumple.trim().isEmpty()) {
             Toast.makeText(requireContext(), "Los campos no pueden ser solo espacios en blanco", Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         // Validar longitud mínima y máxima para nombre y apellido (por ejemplo, 2 a 30 caracteres)
         if (nombre.length() < 2 || nombre.length() > 30) {
@@ -220,7 +211,6 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
                 contactoExistente.setLatitudTrabajo(latitudTrabajo);
                 contactoExistente.setLongitudTrabajo(longitudTrabajo);
             }
-
             // Llama al método de actualización en el ViewModel
             viewModel.update(contactoExistente);
         }
@@ -230,8 +220,6 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
 
         finish();
     }
-
-
 
     private void showDatePickerDialog() {
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
@@ -248,7 +236,6 @@ public class ActualizarContactoFragment extends Fragment implements LocationList
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
         );
-
         datePickerDialog.show();
     }
 

@@ -98,24 +98,20 @@ public class CrearUsuarioFragment extends Fragment implements LocationListener {
             binding.txtLongitudtrabajo.setText(String.valueOf(longitudTrabajo));
         }
 
-        // Detener las actualizaciones de ubicación después de obtener los valores
         locationManager.removeUpdates(this);
-        estadoUbicacion = UbicacionEstado.NINGUNA; // Restablecer el estado de ubicación
+        estadoUbicacion = UbicacionEstado.NINGUNA;
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        // Puedes manejar diferentes estados del proveedor aquí si es necesario
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        // Puedes manejar la habilitación del proveedor de ubicación aquí si es necesario
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        // Puedes manejar la deshabilitación del proveedor de ubicación aquí si es necesario
     }
 
     private void showDatePickerDialog() {
@@ -200,8 +196,6 @@ public class CrearUsuarioFragment extends Fragment implements LocationListener {
             return;
         }
 
-        // Si todas las validaciones son exitosas, proceder con el guardado
-        // Crear un objeto Usuario con los datos ingresados y las ubicaciones
         Usuario nuevoUsuario = new Usuario(nombre, apellido, correo, telefono, fechaCumple,  latitudusuario, longitudusuario, latitudTrabajo, longitudTrabajo);
 
         // Guardar el Usuario usando el ViewModel
@@ -222,14 +216,11 @@ public class CrearUsuarioFragment extends Fragment implements LocationListener {
         navController.popBackStack();
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Mostrar el Bottom Navigation nuevamente al salir del fragmento
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         bottomNavigationView.setVisibility(View.VISIBLE);
-
         binding = null;
     }
 }

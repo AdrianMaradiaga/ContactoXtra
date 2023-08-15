@@ -21,12 +21,9 @@ import hn.uth.contactoxtra.databinding.UbicacionItemBinding;
 import hn.uth.contactoxtra.ui.OnItemClickListener;
 
 public class UbicacionAdapter extends RecyclerView.Adapter<UbicacionAdapter.ViewHolder> {
-
     private List<Ubicacion> dataset;
     private OnItemClickListener<Ubicacion> manejadorEventoClick;
     private Context context;
-
-
     private UbicacionViewModel viewModel;
 
     public UbicacionAdapter(Context context, List<Ubicacion> dataset, OnItemClickListener<Ubicacion> manejadorEventoClick, UbicacionViewModel viewModel){
@@ -49,8 +46,6 @@ public class UbicacionAdapter extends RecyclerView.Adapter<UbicacionAdapter.View
 
         holder.binding.tvCategoria.setText(ubicacionItem.getCategoria());
         holder.binding.tvUsuario.setText(ubicacionItem.getPersona());
-//        holder.binding.tvlatitud.setText(String.valueOf(ubicacionItem.getLatitud()));
-//        holder.binding.tvlongitud.setText(String.valueOf(ubicacionItem.getLongitud()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

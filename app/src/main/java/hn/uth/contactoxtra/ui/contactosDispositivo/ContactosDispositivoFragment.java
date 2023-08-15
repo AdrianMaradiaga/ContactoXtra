@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,8 +59,6 @@ public class ContactosDispositivoFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
-
-
 
     private List<Contacto> obtenerListaDeContactos() {
         List<Contacto> listaContactos = new ArrayList<>();
@@ -117,13 +114,10 @@ public class ContactosDispositivoFragment extends Fragment {
                     contacto.setEmail(correo);
                     emailCursor.close();
                 }
-
                 listaContactos.add(contacto);
             } while (cursor.moveToNext());
-
             cursor.close();
         }
-
         return listaContactos;
     }
 

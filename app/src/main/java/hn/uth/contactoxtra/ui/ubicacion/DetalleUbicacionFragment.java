@@ -42,8 +42,6 @@ public class DetalleUbicacionFragment extends Fragment {
                         ubicacion.getLongitud();
                 tvUbicacion.setText(ubicacionCompleta);
 
-
-
                 binding.btnAbrirUbicacion.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -59,11 +57,8 @@ public class DetalleUbicacionFragment extends Fragment {
                 });
             }
         }
-
         return rootView;
     }
-
-
 
     private void abrirUbicacion() {
         if (ubicacion != null && ubicacion.getLatitud() != 0 && ubicacion.getLongitud() != 0) {
