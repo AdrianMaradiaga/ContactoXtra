@@ -10,6 +10,7 @@
         android:id="@+id/imageView"
         android:layout_width="254dp"
         android:layout_height="154dp"
+        android:layout_marginTop="-12dp"
         android:src="@drawable/user_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +54,7 @@
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:src="@drawable/baseline_phone_24"
         app:layout_constraintStart_toStartOf="@+id/tvNombre"
         app:layout_constraintTop_toBottomOf="@+id/tvApellido" />
@@ -155,5 +156,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTrabajoUsuario" />
+
+    <Button
+        android:id="@+id/btnCompartirUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Compartir"
+        app:layout_constraintStart_toStartOf="@+id/imgTrabajoUsuario"
+        app:layout_constraintTop_toBottomOf="@+id/btnEditarUsuario" />
+
+    <Button
+        android:id="@+id/btnHogarUsuario"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:icon="@drawable/cyan_baseline_home_24"
+        app:layout_constraintStart_toEndOf="@+id/btnCompartirUsuario"
+        app:layout_constraintTop_toTopOf="@+id/btnCompartirUsuario" />
+
+    <Button
+        android:id="@+id/btnTrabajoUsuario"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:icon="@drawable/cyan_baseline_business_24"
+        app:layout_constraintStart_toEndOf="@+id/btnHogarUsuario"
+        app:layout_constraintTop_toTopOf="@+id/btnHogarUsuario" />
+
+    <Button
+        android:id="@+id/btnEliminarUsuario"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="4dp"
+        app:icon="@drawable/baseline_logout_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

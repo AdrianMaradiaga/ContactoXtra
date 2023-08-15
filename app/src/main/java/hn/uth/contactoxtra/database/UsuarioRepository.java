@@ -40,8 +40,6 @@ public class UsuarioRepository {
         });
     }
 
-
-
     public LiveData<Usuario> getUsuarioLiveData() {
         return usuarioLiveData;
     }

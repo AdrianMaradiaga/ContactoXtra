@@ -16,10 +16,8 @@ public abstract class ContactoXtraDatabase extends RoomDatabase {
     public abstract ContactosDao contactosDao();
     public abstract UbicacionDao ubicacionDao();
     public abstract UsuarioDao usuarioDao();
-
     private static volatile ContactoXtraDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-    // ExecutorService para ejecutar operaciones de escritura en el hilo de fondo
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     static ContactoXtraDatabase getDatabase(final Context context) {
