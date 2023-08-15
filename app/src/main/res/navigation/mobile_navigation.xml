@@ -53,6 +53,15 @@
         android:label="Ver detalles de la ubicacion"
         tools:layout="@layout/fragment_detalle_ubicacion" />
 
+    <fragment
+        android:id="@+id/crearUsuarioFragment"
+        android:name="hn.uth.contactoxtra.ui.crearUsuario.CrearUsuarioFragment"
+        android:label="CrearUsuarioFragment" />
+
+    <action
+        android:id="@+id/action_fragmentActual_to_crearUsuarioFragment"
+        app:destination="@id/crearUsuarioFragment" />
+
     <action
         android:id="@+id/action_ubicacionesFragment_to_detalleUbicacionFragment"
         app:destination="@id/detalleUbicacionFragment" />

@@ -1,4 +1,4 @@
-package hn.uth.contactoxtra.ui.usuario;
+package hn.uth.contactoxtra.ui.crearUsuario;
 
 import android.app.Application;
 
@@ -9,12 +9,12 @@ import androidx.lifecycle.LiveData;
 import hn.uth.contactoxtra.database.Usuario;
 import hn.uth.contactoxtra.database.UsuarioRepository;
 
-public class UsuarioViewModel extends AndroidViewModel {
+public class CrearUsuarioViewModel extends AndroidViewModel {
 
     private UsuarioRepository usuarioRepository;
     private LiveData<Usuario> usuarioLiveData;
 
-    public UsuarioViewModel(@NonNull Application application) {
+    public CrearUsuarioViewModel(@NonNull Application application) {
         super(application);
         usuarioRepository = new UsuarioRepository(application);
         usuarioLiveData = usuarioRepository.getUsuarioLiveData();
@@ -28,3 +28,4 @@ public class UsuarioViewModel extends AndroidViewModel {
         usuarioRepository.insert(usuario);
     }
 }
+
